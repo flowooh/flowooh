@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "baseUrl": "./",
+    "paths": {
+      "@flowooh-core/*": ["./packages/flowooh-core/lib/*"],
+      "@flowooh-data/*": ["./packages/flowooh-data/lib/*"]
+    },
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  }
+}

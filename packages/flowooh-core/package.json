@@ -1,0 +1,26 @@
+{
+  "name": "@flowooh/core",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "iHeyTang <dehui1012@qq.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/flowooh-core.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.2.2",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "@types/xml2js": "^0.4.14"
+  }
+}

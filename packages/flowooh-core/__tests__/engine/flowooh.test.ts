@@ -63,4 +63,29 @@ describe('Flowooh', () => {
 
     expect(exec.context.isTerminated()).toBeTruthy();
   });
+
+  it('should get expected data', async () => {
+    const workflow = Flowooh.build();
+
+    expect(workflow).toBeDefined();
+
+    const { context } = await workflow.execute({
+      path,
+      handler: new SimpleWorkflow(),
+    });
+    expect(context.data.trace).toEqual(['start', 'task01']);
+  });
+
+  it('should set data from value', async () => {
+    const workflow = Flowooh.build();
+
+    expect(workflow).toBeDefined();
+
+    const { context } = await workflow.execute({
+      path,
+      handler: new SimpleWorkflow(),
+      value: 'test value',
+    });
+    expect(context.data.startValue).toEqual('test value');
+  });
 });

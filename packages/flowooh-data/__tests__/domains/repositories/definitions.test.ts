@@ -1,17 +1,9 @@
-import FlowoohRepoDefinitionRepository from '@flowooh-data/domains/repositories/definitions';
-import { knex } from 'knex';
-import { FlowoohDefinitionContentData, FlowoohDefinitionData } from 'knex/types/tables';
+import { data as k } from '@flowooh-data/data';
+import { service } from '@flowooh-data/domains';
+import { FlowoohRepoDefinitionContentData, FlowoohRepoDefinitionData } from 'knex/types/tables';
 
 describe('FlowoohRepoDefinitionRepository', () => {
-  const k = knex({
-    client: 'sqlite3',
-    connection: { filename: ':memory:' },
-    useNullAsDefault: true,
-  });
-
-  const repository = new FlowoohRepoDefinitionRepository(k);
-
-  const mockDefinitions: Partial<FlowoohDefinitionData>[] = [
+  const mockDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
     // 生成测试数据
     {
       id: '1',
@@ -43,7 +35,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
     },
   ];
 
-  const mockDefinitionContents: Partial<FlowoohDefinitionContentData>[] = [
+  const mockDefinitionContents: Partial<FlowoohRepoDefinitionContentData>[] = [
     {
       id: '1',
       definition_id: '1',
@@ -105,17 +97,13 @@ describe('FlowoohRepoDefinitionRepository', () => {
     await k.insert(mockDefinitionContents).into('flowooh_repo_definition_contents');
   });
 
-  afterAll(async () => {
-    await k.destroy();
-  });
-
   describe('listDefinitions', () => {
     it('should return the correct list of definitions when no filters are provided', async () => {
       // Arrange
       const params = {};
 
       // Act
-      const result = await repository.listDefinitions(params);
+      const result = await service.repo.definition.listDefinitions(params);
 
       // Assert
       expect(Array.isArray(result)).toBe(true);
@@ -129,7 +117,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       };
 
       // Act
-      const result = await repository.listDefinitions(params);
+      const result = await service.repo.definition.listDefinitions(params);
 
       // Assert
       expect(Array.isArray(result)).toBe(true);
@@ -147,7 +135,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       };
 
       // Act
-      const result = await repository.listDefinitions(params);
+      const result = await service.repo.definition.listDefinitions(params);
 
       // Assert
       expect(Array.isArray(result)).toBe(true);
@@ -165,7 +153,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       };
 
       // Act
-      const result = await repository.listDefinitions(params);
+      const result = await service.repo.definition.listDefinitions(params);
 
       // Assert
       expect(Array.isArray(result)).toBe(true);
@@ -179,7 +167,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       };
 
       // Act
-      const result = await repository.listDefinitions(params);
+      const result = await service.repo.definition.listDefinitions(params);
 
       // Assert
       expect(Array.isArray(result)).toBe(true);
@@ -197,7 +185,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       };
 
       // Act
-      const result = await repository.listDefinitions(params);
+      const result = await service.repo.definition.listDefinitions(params);
 
       // Assert
       expect(Array.isArray(result)).toBe(true);
@@ -214,7 +202,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       const id = mockDefinitions[0].id!;
 
       // Act
-      const result = await repository.getRawContent(id);
+      const result = await service.repo.definition.getRawContent(id);
 
       // Assert
       expect(result).toEqual(mockDefinitionContents[0].content);
@@ -225,7 +213,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       const id = 'nonExistentId';
 
       // Act
-      const result = await repository.getRawContent(id);
+      const result = await service.repo.definition.getRawContent(id);
 
       // Assert
       expect(result).toBeUndefined();
@@ -236,7 +224,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       const id = '';
 
       // Act
-      const result = repository.getRawContent(id);
+      const result = service.repo.definition.getRawContent(id);
 
       // Assert
       await expect(result).rejects.toThrow('id is required');
@@ -249,7 +237,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       const id = mockDefinitions[0].id!;
 
       // Act
-      const result = await repository.getBpmnDefinition(id);
+      const result = await service.repo.definition.getBpmnDefinition(id);
 
       // Assert
       expect(result).toEqual(expect.any(Object));
@@ -261,7 +249,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       const id = 'nonExistentId';
 
       // Act
-      const result = await repository.getBpmnDefinition(id);
+      const result = await service.repo.definition.getBpmnDefinition(id);
 
       // Assert
       expect(result).toBeUndefined();
@@ -272,7 +260,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       const id = '';
 
       // Act
-      const result = repository.getBpmnDefinition(id);
+      const result = service.repo.definition.getBpmnDefinition(id);
 
       // Assert
       await expect(result).rejects.toThrow('id is required');
@@ -297,10 +285,10 @@ describe('FlowoohRepoDefinitionRepository', () => {
       };
 
       // Act
-      const result = await repository.createDefinition(data);
+      const result = await service.repo.definition.createDefinition(data);
 
-      const def = await k<FlowoohDefinitionData>('flowooh_repo_definitions').where('id', result).first();
-      const content = await k<FlowoohDefinitionContentData>('flowooh_repo_definition_contents')
+      const def = await k('flowooh_repo_definitions').where('id', result).first();
+      const content = await k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
         .where('definition_id', def?.id)
         .first();
 

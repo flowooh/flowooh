@@ -1,8 +1,7 @@
-import { Knex } from 'knex';
 import { BaseData } from '../base/base';
 
 declare module 'knex/types/tables' {
-  interface FlowoohDefinitionContentData extends BaseData {
+  interface FlowoohRepoDefinitionContentData extends BaseData {
     /** id of workflow definition */
     definition_id: string;
 
@@ -14,5 +13,9 @@ declare module 'knex/types/tables' {
 
     /** the content of definition, a xml string */
     content: string;
+  }
+
+  interface Tables {
+    flowooh_repo_definition_contents: FlowoohRepoDefinitionContentData;
   }
 }

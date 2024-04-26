@@ -136,14 +136,25 @@ export class Flowooh {
     if (options?.node && context.tokens.length) {
       // if node is provided and context has tokens, get the activity from the provided node
       activity = getActivity(this.process, getWrappedBPMNElement(this.process, options.node));
+      if (!activity) {
+        throw new Error(`Node activity not found or not applicable, ${options.node}`);
+      }
     } else if (!options?.node && !context.tokens.length) {
       // if node is not provided and context has no tokens, should get the start event activity
       if (this.process['bpmn:startEvent']?.length !== 1) {
         throw new Error('Start event is not defined in process or have more than one start event');
       }
       activity = getActivity(this.process, { key: 'bpmn:startEvent', element: this.process['bpmn:startEvent'][0] });
+      if (!activity) throw new Error('Start event activity not found');
     }
-    if (!activity) throw new Error('Node activity not found or not applicable');
+    if (!activity && options?.node && !context.tokens.length) {
+      throw new Error(
+        'Node activity not found or not applicable, context should not be empty when options.node is provided',
+      );
+    }
+    if (!activity) {
+      throw new Error('Node activity not found or not applicable');
+    }
     return activity;
   }
 

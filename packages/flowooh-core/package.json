@@ -13,9 +13,6 @@
   "files": [
     "lib"
   ],
-  "scripts": {
-    "test": "jest"
-  },
   "dependencies": {
     "reflect-metadata": "^0.2.2",
     "xml2js": "^0.6.2"

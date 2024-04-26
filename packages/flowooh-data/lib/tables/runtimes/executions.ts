@@ -1,3 +1,4 @@
+import { Status } from '@flowooh-core/context';
 import { BaseData } from '../base/base';
 
 declare module 'knex/types/tables' {
@@ -7,6 +8,15 @@ declare module 'knex/types/tables' {
 
     /** id of workflow definition */
     proc_definition_id: string;
+
+    /** id of parent execution */
+    parent_id: string;
+
+    /** id of execution in certain process instance */
+    execution_id: string;
+
+    /** status */
+    status: Status;
 
     /** id of current activity */
     act_id: string;

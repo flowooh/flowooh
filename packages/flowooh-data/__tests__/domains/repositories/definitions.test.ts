@@ -75,26 +75,14 @@ describe('FlowoohRepoDefinitionRepository', () => {
   ];
 
   beforeAll(async () => {
-    await k.schema.createTable('flowooh_repo_definitions', (table) => {
-      table.increments('id').primary();
-      table.string('name');
-      table.string('description');
-      table.string('version');
-      table.boolean('enabled');
-      table.boolean('published');
-      table.string('content');
-    });
-
-    await k.schema.createTable('flowooh_repo_definition_contents', (table) => {
-      table.increments('id').primary();
-      table.string('definition_id');
-      table.string('version');
-      table.string('content');
-      table.boolean('published');
-    });
-
     await k.insert(mockDefinitions).into('flowooh_repo_definitions');
     await k.insert(mockDefinitionContents).into('flowooh_repo_definition_contents');
+  });
+
+  afterAll(async () => {
+    await k('flowooh_repo_definitions').truncate();
+    await k('flowooh_repo_definition_contents').truncate();
+    await k.destroy();
   });
 
   describe('listDefinitions', () => {

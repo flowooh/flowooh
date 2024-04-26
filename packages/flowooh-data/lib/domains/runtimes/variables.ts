@@ -10,13 +10,13 @@ export default class FlowoohRtVariableService extends BaseService {
    * @param executionId
    * @param context
    */
-  async save(executionId: string, context: Context) {
+  async saveProcessInstanceData(executionId: string, context: Context) {
     const exec = await this.service.rt.execution.getExecutionById(executionId);
     if (!exec) throw new Error('Execution not found');
+    if (exec.parent_id) throw new Error('process data should be saved in root execution');
 
-    const obj = context.serialize({ data: true, value: false });
-    const records = Object.keys(obj.data).map<Partial<FlowoohRtVariableData>>((key) => {
-      const { value, valueType } = this.toValue(obj.data[key]);
+    const records = Object.keys(context.data).map<Partial<FlowoohRtVariableData>>((key) => {
+      const { value, valueType } = this.toValue(context.data[key]);
 
       return {
         ...value,
@@ -28,7 +28,8 @@ export default class FlowoohRtVariableService extends BaseService {
       };
     });
 
-    await this.k('flowooh_rt_variables').insert(records);
+    await this.k('flowooh_rt_variables').delete().where({ execution_id: executionId });
+    if (records.length) await this.k('flowooh_rt_variables').insert(records);
   }
 
   /**

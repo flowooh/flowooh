@@ -2,6 +2,8 @@ import { data as k } from '@flowooh-data/data';
 import { service } from '@flowooh-data/domains';
 import { SimpleWorkflow } from '../../example';
 import { FlowoohRepoDefinitionContentData, FlowoohRepoDefinitionData } from 'knex/types/tables';
+import { Status } from '@flowooh-core/context';
+import { executionRecordId } from '@flowooh-data/utils/uid';
 
 describe('FlowoohRtExecutionService', () => {
   const mockDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
@@ -179,82 +181,65 @@ describe('FlowoohRtExecutionService', () => {
   ];
 
   beforeAll(async () => {
-    await k.schema.createTable('flowooh_repo_definitions', (table) => {
-      table.increments('id').primary();
-      table.string('name');
-      table.string('description');
-      table.string('version');
-      table.boolean('enabled');
-      table.boolean('published');
-      table.string('content');
-    });
-
-    await k.schema.createTable('flowooh_repo_definition_contents', (table) => {
-      table.increments('id').primary();
-      table.string('definition_id');
-      table.string('version');
-      table.string('content');
-      table.boolean('published');
-    });
-
-    await k.schema.createTable('flowooh_rt_executions', (table) => {
-      table.string('id').primary();
-      table.string('proc_instance_id');
-      table.string('proc_definition_id');
-      table.string('act_id');
-    });
-
-    await k.schema.createTable('flowooh_rt_variables', (table) => {
-      table.increments('id').primary();
-      table.string('proc_instance_id');
-      table.string('proc_definition_id');
-      table.string('execution_id');
-      table.string('key');
-      table.string('value_type');
-      table.string('name');
-      table.string('v_string');
-      table.integer('v_int');
-      table.double('v_double');
-      table.boolean('v_boolean');
-      table.date('v_date');
-      table.jsonb('v_json');
-    });
-
     await k.insert(mockDefinitions).into('flowooh_repo_definitions');
     await k.insert(mockDefinitionContents).into('flowooh_repo_definition_contents');
   });
 
-  describe('execute', () => {
-    it('should execute the flowooh', async () => {
-      const executionId = await service.rt.execution.build({ definitionId: '1' });
-      const result = await service.rt.execution.execute(executionId, { workflow: SimpleWorkflow });
+  afterAll(async () => {
+    await k('flowooh_repo_definitions').truncate();
+    await k('flowooh_repo_definition_contents').truncate();
+    await k.destroy();
+  });
+
+  describe('start', () => {
+    it('should start the flowooh', async () => {
+      const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
       expect(result).toBeDefined();
     });
 
     it('should throw an error if target is not provided', async () => {
-      const executionId = await service.rt.execution.build({ definitionId: '1' });
-      const result = service.rt.execution.execute(executionId, { workflow: undefined as any });
+      const result = service.rt.execution.start('1', { workflow: undefined as any });
       expect(result).rejects.toThrow('target is required');
     });
 
     it('should throw an error if target is invalid', async () => {
-      const executionId = await service.rt.execution.build({ definitionId: '1' });
-      const result = service.rt.execution.execute(executionId, { workflow: class {} });
+      const result = service.rt.execution.start('1', { workflow: class {} });
       expect(result).rejects.toThrow('Invalid target, target should be a Workflow');
     });
 
     it('should throw an error if definition is not found', async () => {
-      const executionId = service.rt.execution.build({ definitionId: '5' });
-      expect(executionId).rejects.toThrow('definition not found');
+      const result = service.rt.execution.start('5', { workflow: SimpleWorkflow });
+      expect(result).rejects.toThrow('definition not found');
     });
 
     it('should get expected data', async () => {
-      const executionId = await service.rt.execution.build({ definitionId: '1' });
-      const { context } = await service.rt.execution.execute(executionId, {
-        workflow: SimpleWorkflow,
-        value: 'test value',
-      });
-      expect(context.data.trace).toEqual(['start', 'task01']);
+      const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
+      expect(result.context.data.trace).toEqual(['start', 'task01']);
+    });
+  });
+
+  describe('execute', () => {
+    it('should execute task1 in the flowooh', async () => {
+      const exec = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
+
+      const processInstId = exec.process.$.id;
+      const tokenId = exec.context.tokens[1].id;
+      const execId = executionRecordId(processInstId, tokenId);
+
+      const result = await service.rt.execution.execute(execId, { workflow: SimpleWorkflow });
+
+      expect(result.context.status).toEqual(Status.Paused);
+    });
+
+    it('should execute task02 in the flowooh', async () => {
+      const exec = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
+
+      const processInstId = exec.process.$.id;
+      const tokenId = exec.context.tokens[2].id;
+      const execId = executionRecordId(processInstId, tokenId);
+
+      const result = await service.rt.execution.execute(execId, { workflow: SimpleWorkflow });
+      expect(result.context.status).toEqual(Status.Terminated);
     });
   });
 });

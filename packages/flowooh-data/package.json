@@ -13,9 +13,6 @@
   "files": [
     "lib"
   ],
-  "scripts": {
-    "test": "jest"
-  },
   "dependencies": {
     "@flowooh/core": "^0.0.0",
     "inversify": "^6.0.2",

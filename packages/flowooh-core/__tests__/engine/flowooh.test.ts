@@ -1,7 +1,7 @@
-import { Flowooh } from '@flowooh-core/engine';
-import { getBPMNProcess, parse, readFile } from '@flowooh-core/utils';
+import { Context } from '@flowooh/core/context';
+import { Flowooh } from '@flowooh/core/engine';
+import { getBPMNProcess, parse, readFile } from '@flowooh/core/utils';
 import { SimpleWorkflow } from './simple-workflow';
-import { Context } from '@flowooh-core/context';
 
 describe('Flowooh', () => {
   const path = `${__dirname}/simple-workflow.bpmn`;

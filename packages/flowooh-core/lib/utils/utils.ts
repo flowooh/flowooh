@@ -1,20 +1,9 @@
-import { Activity, Sequence } from '@flowooh-core/base';
-import {
-  BPMNDefinition,
-  BPMNEvent,
-  BPMNGateway,
-  BPMNProcess,
-  BPMNTask,
-  IdentityOptions,
-  WrappedElement,
-} from '@flowooh-core/types';
+import { EventActivity, GatewayActivity, TaskActivity } from '@flowooh/core/activities';
+import { Activity, Sequence } from '@flowooh/core/base';
+import { Container } from '@flowooh/core/container';
+import { BPMNDefinition, BPMNEvent, BPMNGateway, BPMNProcess, BPMNTask, IdentityOptions, WrappedElement } from '@flowooh/core/types';
 import fs from 'fs';
 import { parseString } from 'xml2js';
-import { Container } from '../container';
-import { TaskActivity } from '@flowooh-core/activities/task';
-import { EventActivity } from '@flowooh-core/activities/event';
-import { GatewayActivity } from '@flowooh-core/activities/gateway';
-import { NodeKey } from './metadata';
 
 export const getActivity = (process: BPMNProcess, data?: WrappedElement): Activity => {
   if (!data) return new Activity(process);

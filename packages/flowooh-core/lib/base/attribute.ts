@@ -1,4 +1,4 @@
-import { BPMNProcess } from '@flowooh-core/types';
+import { BPMNProcess } from '@flowooh/core/types';
 
 export class Attribute {
   protected process: BPMNProcess;

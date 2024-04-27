@@ -1,5 +1,5 @@
-import { IdentityOptions, MethodOptions } from '@flowooh-core/types';
-import { NodeKey, ParamKey } from '@flowooh-core/utils';
+import { IdentityOptions, MethodOptions } from '@flowooh/core/types';
+import { NodeKey, ParamKey } from '@flowooh/core/utils';
 import { ParamType } from './params';
 
 export function Node(options: IdentityOptions & { pause?: true }) {
@@ -12,11 +12,7 @@ export function Node(options: IdentityOptions & { pause?: true }) {
     const method = descriptor.value;
 
     descriptor.value = function ({ activity, context, token, data, value }: MethodOptions) {
-      const params: { parameterIndex: number; type: ParamType }[] = Reflect.getOwnMetadata(
-        ParamKey,
-        target,
-        propertyName,
-      );
+      const params: { parameterIndex: number; type: ParamType }[] = Reflect.getOwnMetadata(ParamKey, target, propertyName);
 
       if (params?.length) {
         const args: any[] = [];

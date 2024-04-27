@@ -1,4 +1,4 @@
-import { State, Status, Token } from '@flowooh-core/context';
+import { State, Status, Token } from '@flowooh/core/context';
 
 describe('Token', () => {
   let token: Token;

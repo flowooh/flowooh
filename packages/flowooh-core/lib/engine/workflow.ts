@@ -1,4 +1,4 @@
-import { Metadata } from '@flowooh-core/types';
+import { Metadata } from '@flowooh/core/types';
 
 /**
  * any workflow class must extend this class

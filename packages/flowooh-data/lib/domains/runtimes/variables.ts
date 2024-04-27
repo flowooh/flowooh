@@ -1,6 +1,6 @@
-import { Context } from '@flowooh-core/context';
-import { BaseService } from '@flowooh-data/base/service';
-import { Service } from '@flowooh-data/decorators';
+import { Context } from '@flowooh/core';
+import { BaseService } from '@flowooh/data/base/service';
+import { Service } from '@flowooh/data/decorators';
 import { FlowoohRtVariableData } from 'knex/types/tables';
 
 @Service('flowoohRtVariableService')

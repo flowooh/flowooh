@@ -1,5 +1,5 @@
-import { data as k } from '@flowooh-data/data';
-import { service } from '@flowooh-data/domains';
+import { data as k } from '@flowooh/data/data';
+import { service } from '@flowooh/data/domains';
 import { FlowoohRepoDefinitionContentData, FlowoohRepoDefinitionData } from 'knex/types/tables';
 
 describe('FlowoohRepoDefinitionRepository', () => {
@@ -276,9 +276,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
       const result = await service.repo.definition.createDefinition(data);
 
       const def = await k('flowooh_repo_definitions').where('id', result).first();
-      const content = await k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
-        .where('definition_id', def?.id)
-        .first();
+      const content = await k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents').where('definition_id', def?.id).first();
 
       // Assert
       expect(def?.name).toEqual(data.name);

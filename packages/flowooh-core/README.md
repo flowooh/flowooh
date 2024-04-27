@@ -5,7 +5,7 @@
 ## Usage
 
 ```
-import { Flowooh } from '@flowooh-core'
+import { Flowooh } from '@flowooh/core'
 
 // TODO: DEMONSTRATE API
 ```

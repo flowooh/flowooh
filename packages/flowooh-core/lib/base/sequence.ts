@@ -1,5 +1,5 @@
-import { BPMNProcess, BPMNSequenceFlow } from '@flowooh-core/types';
-import { getActivity, getWrappedBPMNElement } from '@flowooh-core/utils';
+import { BPMNProcess, BPMNSequenceFlow } from '@flowooh/core/types';
+import { getActivity, getWrappedBPMNElement } from '@flowooh/core/utils';
 import { Attribute } from './attribute';
 
 export class Sequence extends Attribute {

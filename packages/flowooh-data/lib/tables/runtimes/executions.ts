@@ -1,4 +1,4 @@
-import { Status } from '@flowooh-core/context';
+import { Status } from '@flowooh/core';
 import { BaseData } from '../base/base';
 
 declare module 'knex/types/tables' {

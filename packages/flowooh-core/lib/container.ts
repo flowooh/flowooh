@@ -1,11 +1,5 @@
-import {
-  BPMNDefinition,
-  DefinitionContainer,
-  ElementContainer,
-  IdentityOptions,
-  WrappedElement,
-} from '@flowooh-core/types';
-import { logger } from '@flowooh-core/utils';
+import { BPMNDefinition, DefinitionContainer, ElementContainer, IdentityOptions, WrappedElement } from '@flowooh/core/types';
+import { logger } from '@flowooh/core/utils';
 
 const log = logger('container');
 

@@ -1,6 +1,6 @@
-import { IdentityOptions, Metadata, ProcessOptions } from '@flowooh-core/types';
-import { parse, readFile, uid } from '@flowooh-core/utils';
-import { Container } from '@flowooh-core/container';
+import { IdentityOptions, Metadata, ProcessOptions } from '@flowooh/core/types';
+import { parse, readFile, uid } from '@flowooh/core/utils';
+import { Container } from '@flowooh/core/container';
 
 export function Process(options: Partial<ProcessOptions & IdentityOptions>, id: string = uid()): any {
   if ('schema' in options) Container.addDefinition(id, options.schema!);

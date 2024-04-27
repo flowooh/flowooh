@@ -1,5 +1,5 @@
-import { BaseService } from '@flowooh-data/base/service';
-import { Service } from '@flowooh-data/decorators';
+import { BaseService } from '@flowooh/data/base/service';
+import { Service } from '@flowooh/data/decorators';
 import { FlowoohRepoDefinitionContentData } from 'knex/types/tables';
 
 @Service('flowoohRepoDefinitionContentService')
@@ -8,19 +8,14 @@ export default class FlowoohRepoDefinitionContentService extends BaseService {
    * get list of workflow definitions
    * @returns
    */
-  async listDefinitionContents(params: {
-    definitionId: string;
-  }): Promise<Pick<FlowoohRepoDefinitionContentData, 'version'>[]> {
+  async listDefinitionContents(params: { definitionId: string }): Promise<Pick<FlowoohRepoDefinitionContentData, 'version'>[]> {
     const res = await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
       .where('definition_id', params.definitionId)
       .select('id', 'version');
     return res;
   }
 
-  async getInfo(
-    defId: string,
-    version: string,
-  ): Promise<Pick<FlowoohRepoDefinitionContentData, 'id' | 'published'> | undefined> {
+  async getInfo(defId: string, version: string): Promise<Pick<FlowoohRepoDefinitionContentData, 'id' | 'published'> | undefined> {
     const res = await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
       .where('definition_id', defId)
       .where('version', version)
@@ -48,10 +43,7 @@ export default class FlowoohRepoDefinitionContentService extends BaseService {
    * @param data
    * @returns
    */
-  async createDefinitionContent(
-    defId: string,
-    data: Pick<FlowoohRepoDefinitionContentData, 'version' | 'content'>,
-  ): Promise<string> {
+  async createDefinitionContent(defId: string, data: Pick<FlowoohRepoDefinitionContentData, 'version' | 'content'>): Promise<string> {
     const latest = await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
       .where('definition_id', defId)
       .orderBy('version', 'desc')
@@ -79,10 +71,7 @@ export default class FlowoohRepoDefinitionContentService extends BaseService {
    * @returns
    */
   async editDefinitionContent(id: string, content: string): Promise<void> {
-    const origin = await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
-      .where('id', id)
-      .select()
-      .first();
+    const origin = await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents').where('id', id).select().first();
 
     if (!origin) throw new Error('definition not found');
 
@@ -100,9 +89,7 @@ export default class FlowoohRepoDefinitionContentService extends BaseService {
    * @param id
    */
   async publishDefinitionContent(id: string): Promise<void> {
-    await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
-      .where('id', id)
-      .update({ published: true });
+    await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents').where('id', id).update({ published: true });
   }
 
   /**
@@ -110,8 +97,6 @@ export default class FlowoohRepoDefinitionContentService extends BaseService {
    * @param id
    */
   async unpublishDefinitionContent(id: string): Promise<void> {
-    await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
-      .where('id', id)
-      .update({ published: false });
+    await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents').where('id', id).update({ published: false });
   }
 }

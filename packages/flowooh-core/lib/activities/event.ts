@@ -1,6 +1,6 @@
-import { BPMNEvent, BPMNProcess } from '@flowooh-core/types';
-import { Activity } from '../base/activity';
-import { getActivity, getWrappedBPMNElement } from '../utils/utils';
+import { Activity } from '@flowooh/core/base';
+import { BPMNEvent, BPMNProcess } from '@flowooh/core/types';
+import { getActivity, getWrappedBPMNElement } from '@flowooh/core/utils';
 import { TaskActivity } from './task';
 
 enum EventType {

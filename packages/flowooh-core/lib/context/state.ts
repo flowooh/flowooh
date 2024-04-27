@@ -1,4 +1,4 @@
-import { Serializable } from '@flowooh-core/types';
+import { Serializable } from '@flowooh/core/types';
 import { Status } from './enums';
 
 export interface IState<V = any> {

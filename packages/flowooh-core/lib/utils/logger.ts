@@ -4,7 +4,7 @@ const color = (color: string, text: string) => {
   return `\x1b[${color}${text}\x1b[0m`;
 };
 
-export const logger = (namespace: string, prefix = 'workflow-js') => {
+export const logger = (namespace: string, prefix = '@flowooh/core') => {
   const log = debug(`${prefix}:${namespace}`);
 
   return {

@@ -1,4 +1,4 @@
-import { TaskType } from '@flowooh-core/activities/task';
+import { TaskType } from '@flowooh/core/activities';
 import { $ } from './base';
 
 export type BPMNElement = {

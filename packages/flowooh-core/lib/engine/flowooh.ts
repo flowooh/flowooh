@@ -1,16 +1,8 @@
-import { Activity } from '@flowooh-core/base';
-import { Container } from '@flowooh-core/container';
-import { Context, State, Status, Token } from '@flowooh-core/context';
-import { $, BPMNDefinition, BPMNProcess, IdentityOptions, Metadata, MethodOptions } from '@flowooh-core/types';
-import {
-  NodeKey,
-  getActivity,
-  getBPMNProcess,
-  getWrappedBPMNElement,
-  logger,
-  parse,
-  readFile,
-} from '@flowooh-core/utils';
+import { Activity } from '@flowooh/core/base';
+import { Container } from '@flowooh/core/container';
+import { Context, State, Status, Token } from '@flowooh/core/context';
+import { $, BPMNDefinition, BPMNProcess, IdentityOptions, Metadata, MethodOptions } from '@flowooh/core/types';
+import { NodeKey, getActivity, getBPMNProcess, getWrappedBPMNElement, logger, parse, readFile } from '@flowooh/core/utils';
 import { Workflow } from './workflow';
 
 const log = logger('engine');
@@ -148,9 +140,7 @@ export class Flowooh {
       if (!activity) throw new Error('Start event activity not found');
     }
     if (!activity && options?.node && !context.tokens.length) {
-      throw new Error(
-        'Node activity not found or not applicable, context should not be empty when options.node is provided',
-      );
+      throw new Error('Node activity not found or not applicable, context should not be empty when options.node is provided');
     }
     if (!activity) {
       throw new Error('Node activity not found or not applicable');
@@ -255,12 +245,7 @@ export class Flowooh {
  *
  * @returns The value of the method, or the exception if there is one.
  */
-async function run<D = any, V = any>(
-  target: any,
-  method: string,
-  options: MethodOptions<D, V>,
-  is_first_iteration?: boolean,
-) {
+async function run<D = any, V = any>(target: any, method: string, options: MethodOptions<D, V>, is_first_iteration?: boolean) {
   options.activity.token = options.token;
   options.activity.context = options.context;
 

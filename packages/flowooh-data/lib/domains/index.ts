@@ -1,5 +1,5 @@
-import { FlowoohDataService } from '@flowooh-data';
-import { serviceContainer } from '@flowooh-data/decorators';
+import { FlowoohDataService } from '@flowooh/data';
+import { serviceContainer } from '@flowooh/data/decorators';
 import './repositories/definition_contents';
 import './repositories/definitions';
 import './runtimes/executions';
@@ -27,7 +27,7 @@ service.rt = {
   variable: getService('flowoohRtVariableService'),
 };
 
-declare module '@flowooh-data' {
+declare module '@flowooh/data' {
   interface FlowoohDataService {
     repo: {
       definition: FlowoohRepoDefinitionService;

@@ -1,4 +1,4 @@
-import { Activity } from '@flowooh-core/base';
+import { Activity } from '@flowooh/core/base';
 import { BPMNDefinition } from './bpmn';
 
 export type Serializable<SerializeValue = Record<string, any>, OptionKeys extends string = string> = {

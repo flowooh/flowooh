@@ -1,7 +1,4 @@
-import { EventActivity } from '@flowooh-core/activities/event';
-import { Context, Token } from '@flowooh-core/context';
-import { Act, Ctx, Data, Node, Param, Process, Sign, Value } from '@flowooh-core/decorators';
-import { Workflow } from '@flowooh-core/engine/workflow';
+import { Act, Context, Ctx, Data, EventActivity, Node, Param, Process, Sign, TaskActivity, Token, Value, Workflow } from '@flowooh/core';
 
 @Process({ id: 'Process_1igpwhg' })
 export class SimpleWorkflow extends Workflow {
@@ -15,7 +12,7 @@ export class SimpleWorkflow extends Workflow {
   }
 
   @Node({ id: 'Activity_0xzkax6' })
-  public task01(@Act() activity: EventActivity, @Param('data') data: any, @Ctx() context: Context) {
+  public task01(@Act() activity: TaskActivity, @Param('data') data: any, @Ctx() context: Context) {
     activity.takeOutgoing({ pause: true });
 
     context.data = { ...(data || {}), trace: [...(data?.trace || []), 'task01'] };

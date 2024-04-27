@@ -1,4 +1,4 @@
-import { State, Status } from '@flowooh-core/context';
+import { State, Status } from '@flowooh/core/context';
 
 describe('State', () => {
   it('should create a new state with default values', () => {

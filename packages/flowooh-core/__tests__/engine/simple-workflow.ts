@@ -1,7 +1,7 @@
-import { EventActivity } from '@flowooh-core/activities/event';
-import { Context, Token } from '@flowooh-core/context';
-import { Process, Node, Act, Param, Ctx, Sign, Data, Value } from '@flowooh-core/decorators';
-import { Workflow } from '@flowooh-core/engine';
+import { EventActivity } from '@flowooh/core/activities/event';
+import { Context, Token } from '@flowooh/core/context';
+import { Act, Ctx, Data, Node, Param, Process, Sign, Value } from '@flowooh/core/decorators';
+import { Workflow } from '@flowooh/core/engine';
 
 @Process({ id: 'Process_1igpwhg' })
 export class SimpleWorkflow extends Workflow {

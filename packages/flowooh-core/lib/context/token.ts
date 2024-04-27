@@ -1,5 +1,5 @@
-import { Serializable } from '@flowooh-core/types';
-import { uid } from '../utils/uid';
+import { Serializable } from '@flowooh/core/types';
+import { uid } from '@flowooh/core/utils';
 import { Status } from './enums';
 import { IState, State } from './state';
 

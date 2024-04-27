@@ -1,5 +1,5 @@
-import { Activity } from '@flowooh-core/base';
-import { Context, Token } from '@flowooh-core/context';
+import { Activity } from '@flowooh/core/base';
+import { Context, Token } from '@flowooh/core/context';
 
 export type MethodOptions<D = any, V = any> = {
   activity: Activity;

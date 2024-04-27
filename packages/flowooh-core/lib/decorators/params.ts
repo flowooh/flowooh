@@ -1,4 +1,4 @@
-import { ParamKey } from '@flowooh-core/utils';
+import { ParamKey } from '@flowooh/core/utils';
 
 export type ParamType = 'activity' | 'context' | 'token' | 'data' | 'value';
 

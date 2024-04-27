@@ -4,9 +4,7 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "@flowooh-core/*": ["./lib/*"]
-    },
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+      "@flowooh/core/*": ["./lib/*"]
+    }
   }
 }

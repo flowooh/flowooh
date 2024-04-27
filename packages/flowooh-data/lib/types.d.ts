@@ -1,3 +1,3 @@
-declare module '@flowooh-data' {
+declare module '@flowooh/data' {
   interface FlowoohDataService {}
 }

@@ -1,4 +1,4 @@
-import { IdentityOptions, Serializable } from '@flowooh-core/types';
+import { IdentityOptions, Serializable } from '@flowooh/core/types';
 import { Status } from './enums';
 import { IToken, Token } from './token';
 

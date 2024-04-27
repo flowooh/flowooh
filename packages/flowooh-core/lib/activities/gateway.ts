@@ -1,8 +1,7 @@
-import { Activity } from '../base/activity';
-import { Sequence } from '../base/sequence';
-import { Status, Token } from '../context';
-import { BPMNGateway, BPMNProcess, BPMNSequenceFlow, GoOutInterface, IdentityOptions } from '../types';
-import { getWrappedBPMNElement, takeOutgoing } from '../utils/utils';
+import { Activity, Sequence } from '@flowooh/core/base';
+import { Status, Token } from '@flowooh/core/context';
+import { BPMNGateway, BPMNProcess, BPMNSequenceFlow, GoOutInterface, IdentityOptions } from '@flowooh/core/types';
+import { getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
 
 export enum GatewayType {
   Complex = 'complex',
@@ -51,8 +50,7 @@ export class GatewayActivity extends Activity {
         break;
 
       case GatewayType.Exclusive:
-        if (outgoing && outgoing.length !== 1)
-          outgoing = this.default?.targetRef ? [this.default.targetRef] : undefined;
+        if (outgoing && outgoing.length !== 1) outgoing = this.default?.targetRef ? [this.default.targetRef] : undefined;
         break;
 
       case GatewayType.EventBased:

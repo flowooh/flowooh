@@ -1,6 +1,6 @@
-import { service } from '@flowooh-data/domains';
-import FlowoohRepoDefinitionContentService from '@flowooh-data/domains/repositories/definition_contents';
-import FlowoohRepoDefinitionService from '@flowooh-data/domains/repositories/definitions';
+import { service } from '@flowooh/data/domains';
+import FlowoohRepoDefinitionContentService from '@flowooh/data/domains/repositories/definition_contents';
+import FlowoohRepoDefinitionService from '@flowooh/data/domains/repositories/definitions';
 
 describe('service', () => {
   it('should have an instance of FlowoohRepoDefinitionService', () => {

@@ -1,8 +1,8 @@
-import { BPMNActivity, BPMNProcess, BPMNSequenceFlow, GoOutInterface, IdentityOptions } from '@flowooh-core/types';
+import { Context, State, Status, Token } from '@flowooh/core/context';
+import { BPMNActivity, BPMNProcess, BPMNSequenceFlow, GoOutInterface, IdentityOptions } from '@flowooh/core/types';
+import { getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
 import { Attribute } from './attribute';
-import { getWrappedBPMNElement, takeOutgoing } from '@flowooh-core/utils';
 import { Sequence } from './sequence';
-import { Context, State, Status, Token } from '@flowooh-core/context';
 
 export class Activity extends Attribute {
   protected readonly key?: string;
@@ -65,9 +65,7 @@ export class Activity extends Attribute {
 
   protected goOut(outgoing: GoOutInterface[]) {
     const pause = (out: GoOutInterface) =>
-      typeof out!.pause === 'string'
-        ? out!.pause === out!.activity.id || out!.pause === out!.activity.name
-        : out!.pause;
+      typeof out!.pause === 'string' ? out!.pause === out!.activity.id || out!.pause === out!.activity.name : out!.pause;
 
     if (outgoing?.length && this.token) {
       if (outgoing.length === 1) {

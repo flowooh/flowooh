@@ -5,7 +5,7 @@
   "author": "iHeyTang <dehui1012@qq.com>",
   "homepage": "",
   "license": "ISC",
-  "main": "lib/flowooh-data.js",
+  "main": "lib/index.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"

@@ -1,8 +1,7 @@
-import { BPMNDefinition } from '@flowooh-core/types';
-import { parse } from '@flowooh-core/utils';
+import { BPMNDefinition, parse } from '@flowooh/core';
+import { BaseService } from '@flowooh/data/base/service';
+import { Service } from '@flowooh/data/decorators';
 import { FlowoohRepoDefinitionContentData, FlowoohRepoDefinitionData } from 'knex/types/tables';
-import { BaseService } from '@flowooh-data/base/service';
-import { Service } from '@flowooh-data/decorators';
 
 @Service('flowoohRepoDefinitionService')
 export default class FlowoohRepoDefinitionService extends BaseService {
@@ -28,9 +27,7 @@ export default class FlowoohRepoDefinitionService extends BaseService {
    * @param id
    * @returns
    */
-  async getInfo(
-    id: string,
-  ): Promise<Pick<FlowoohRepoDefinitionData, 'name' | 'description' | 'version' | 'id'> | undefined> {
+  async getInfo(id: string): Promise<Pick<FlowoohRepoDefinitionData, 'name' | 'description' | 'version' | 'id'> | undefined> {
     if (!id) throw new Error('id is required');
     const res = await this.k<FlowoohRepoDefinitionData>('flowooh_repo_definitions')
       .where('id', id)
@@ -49,10 +46,7 @@ export default class FlowoohRepoDefinitionService extends BaseService {
   async getRawContent(id: string): Promise<string | undefined> {
     if (!id) throw new Error('id is required');
 
-    const def = await this.k<FlowoohRepoDefinitionData>('flowooh_repo_definitions')
-      .where('id', id)
-      .select('id', 'version')
-      .first();
+    const def = await this.k<FlowoohRepoDefinitionData>('flowooh_repo_definitions').where('id', id).select('id', 'version').first();
     if (!def) return undefined;
 
     const content = await this.service.repo.definitionContent.getRawContent(def.id, def.version);
@@ -78,8 +72,7 @@ export default class FlowoohRepoDefinitionService extends BaseService {
    * @returns
    */
   async createDefinition(
-    data: Pick<FlowoohRepoDefinitionData, 'name' | 'description'> &
-      Pick<FlowoohRepoDefinitionContentData, 'content' | 'version'>,
+    data: Pick<FlowoohRepoDefinitionData, 'name' | 'description'> & Pick<FlowoohRepoDefinitionContentData, 'content' | 'version'>,
   ): Promise<string> {
     if (!data.name) throw new Error('name is required');
     if (!data.description) throw new Error('description is required');

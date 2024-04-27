@@ -5,6 +5,11 @@
     "baseUrl": ".",
     "paths": {
       "@flowooh/core/*": ["./lib/*"]
-    }
-  }
+    },
+    "esModuleInterop": true,
+    "declaration": true,
+    "sourceMap": true
+  },
+  "include": ["lib/**/*"],
+  "exclude": ["node_modules"]
 }

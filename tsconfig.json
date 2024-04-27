@@ -4,6 +4,8 @@
     "module": "NodeNext",
     "baseUrl": "./",
     "paths": {
+      "@flowooh/core": ["./packages/flowooh-core/lib"],
+      "@flowooh/data": ["./packages/flowooh-data/lib"],
       "@flowooh/core/*": ["./packages/flowooh-core/lib/*"],
       "@flowooh/data/*": ["./packages/flowooh-data/lib/*"]
     },

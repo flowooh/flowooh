@@ -1,5 +1,5 @@
-import { FlowoohDataService } from '@flowooh/data';
 import { data } from '@flowooh/data/data';
+import { FlowoohDataService } from '@flowooh/data/lib/domains';
 import { injectable } from 'inversify';
 import { Knex } from 'knex';
 

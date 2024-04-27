@@ -5,7 +5,10 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "lerna run build",
+    "link:core": "lerna exec --scope=@flowooh/core -- npm link",
+    "link:data": "lerna exec --scope=@flowooh/data -- npm link"
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",

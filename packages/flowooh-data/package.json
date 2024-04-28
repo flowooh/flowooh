@@ -5,8 +5,8 @@
   "author": "iHeyTang <dehui1012@qq.com>",
   "homepage": "",
   "license": "ISC",
-  "main": "dist/app.js",
-  "types": "dist/app.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"

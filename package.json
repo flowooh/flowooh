@@ -6,9 +6,8 @@
   ],
   "scripts": {
     "test": "jest",
-    "build": "lerna run build",
-    "link:core": "lerna exec --scope=@flowooh/core -- npm link",
-    "link:data": "lerna exec --scope=@flowooh/data -- npm link"
+    "build": "tsc -b -v packages",
+    "clean": "tsc -b --clean packages"
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",

@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.build.json",
+  "compilerOptions": {
+    "types": ["jest"],
+    "outDir": ".",
+    "rootDir": ".",
+    "paths": {
+      "@flowooh/core": ["../flowooh-core"],
+      "@flowooh/core/*": ["../flowooh-core/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

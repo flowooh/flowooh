@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { injectable, inject, Container } from 'inversify';
+import { Container, injectable } from 'inversify';
 
 export const serviceContainer = new Container();
 
@@ -13,11 +13,4 @@ export function Service(key: string) {
     serviceContainer.bind(key).to(target);
     return t;
   };
-}
-
-/**
- * decorator for getting instance
- */
-export function Inject(key: string) {
-  return inject(key);
 }

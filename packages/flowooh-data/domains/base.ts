@@ -1,7 +1,8 @@
-import { data } from '@flowooh/data/data';
-import { FlowoohDataService } from '@flowooh/data/lib/domains';
+import 'reflect-metadata';
 import { injectable } from 'inversify';
 import { Knex } from 'knex';
+import { FlowoohDataService } from '.';
+import { data } from '../data';
 
 @injectable()
 export abstract class BaseService {

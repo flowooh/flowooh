@@ -1,6 +1,7 @@
 import { data as k } from '@flowooh/data/data';
 import { service } from '@flowooh/data/domains';
-import { FlowoohRepoDefinitionContentData, FlowoohRepoDefinitionData } from 'knex/types/tables';
+import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositories/definition_contents';
+import { FlowoohRepoDefinitionData } from '@flowooh/data/tables/repositories/definitions';
 
 describe('FlowoohRepoDefinitionRepository', () => {
   const mockDefinitions: Partial<FlowoohRepoDefinitionData>[] = [

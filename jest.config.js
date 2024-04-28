@@ -18,8 +18,8 @@ module.exports = {
       setupFilesAfterEnv: ['<rootDir>/packages/flowooh-core/jest.setup.js'],
       testMatch: ['<rootDir>/packages/flowooh-core/__tests__/**/*.test.ts'],
       moduleNameMapper: {
-        '^@flowooh/core/(.*)$': '<rootDir>/packages/flowooh-core/lib/$1',
-        '^@flowooh/data/(.*)$': '<rootDir>/packages/flowooh-data/lib/$1',
+        '^@flowooh/core/(.*)$': '<rootDir>/packages/flowooh-core/$1',
+        '^@flowooh/data/(.*)$': '<rootDir>/packages/flowooh-data/$1',
       },
     },
     {
@@ -32,9 +32,9 @@ module.exports = {
       setupFilesAfterEnv: ['<rootDir>/packages/flowooh-data/jest.setup.js'],
       testMatch: ['<rootDir>/packages/flowooh-data/__tests__/**/*.test.ts'],
       moduleNameMapper: {
-        '^@flowooh/core$': '<rootDir>/packages/flowooh-core/lib/',
-        '^@flowooh/core/(.*)$': '<rootDir>/packages/flowooh-core/lib/$1',
-        '^@flowooh/data/(.*)$': '<rootDir>/packages/flowooh-data/lib/$1',
+        '^@flowooh/core$': '<rootDir>/packages/flowooh-core',
+        '^@flowooh/core/(.*)$': '<rootDir>/packages/flowooh-core/$1',
+        '^@flowooh/data/(.*)$': '<rootDir>/packages/flowooh-data/$1',
       },
     },
   ],

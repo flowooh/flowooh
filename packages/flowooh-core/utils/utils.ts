@@ -2,7 +2,7 @@ import { EventActivity, GatewayActivity, TaskActivity } from '@flowooh/core/acti
 import { Activity, Sequence } from '@flowooh/core/base';
 import { Container } from '@flowooh/core/container';
 import { BPMNDefinition, BPMNEvent, BPMNGateway, BPMNProcess, BPMNTask, IdentityOptions, WrappedElement } from '@flowooh/core/types';
-import fs from 'fs';
+import * as fs from 'fs';
 import { parseString } from 'xml2js';
 
 export const getActivity = (process: BPMNProcess, data?: WrappedElement): Activity => {

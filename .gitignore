@@ -2,4 +2,8 @@ node_modules/
 .nx
 .vscode
 .db
-dist
+
+packages/**/*.d.ts
+packages/**/*.js
+
+*.tsbuildinfo

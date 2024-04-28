@@ -1,19 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "baseUrl": "./",
-    "paths": {
-      "@flowooh/core": ["./packages/flowooh-core/lib"],
-      "@flowooh/data": ["./packages/flowooh-data/lib"],
-      "@flowooh/core/*": ["./packages/flowooh-core/lib/*"],
-      "@flowooh/data/*": ["./packages/flowooh-data/lib/*"]
-    },
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "removeComments": true,
+    "noLib": false,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
-  }
+    "experimentalDecorators": true,
+    "useUnknownInCatchVariables": false,
+    "target": "ES2021",
+    "sourceMap": true,
+    "allowJs": false,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "strict": true,
+    "paths": {
+      "@flowooh/core": ["./packages/flowooh-core"],
+      "@flowooh/core/*": ["./packages/flowooh-core/*"],
+      "@flowooh/data": ["./packages/flowooh-data"],
+      "@flowooh/data/*": ["./packages/flowooh-data/*"]
+    }
+  },
+  "include": ["packages/**/*"],
+  "exclude": ["node_modules"]
 }

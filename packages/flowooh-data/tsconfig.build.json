@@ -1,8 +1,20 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../tsconfig.build.json",
   "compilerOptions": {
+    "types": ["jest"],
+    "outDir": ".",
+    "rootDir": ".",
     "paths": {
-      "@flowooh/data/*": ["./lib/*"]
+      "@flowooh/core": ["../flowooh-core"],
+      "@flowooh/core/*": ["../flowooh-core/*"],
+      "@flowooh/data": ["../flowooh-data"],
+      "@flowooh/data/*": ["../flowooh-data/*"]
     }
-  }
+  },
+  "exclude": ["node_modules"],
+  "references": [
+    {
+      "path": "../flowooh-core/tsconfig.build.json"
+    }
+  ]
 }

@@ -1,8 +1,9 @@
 import { Status } from '@flowooh/core';
 import { data as k } from '@flowooh/data/data';
 import { service } from '@flowooh/data/domains';
+import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositories/definition_contents';
+import { FlowoohRepoDefinitionData } from '@flowooh/data/tables/repositories/definitions';
 import { executionRecordId } from '@flowooh/data/utils/uid';
-import { FlowoohRepoDefinitionContentData, FlowoohRepoDefinitionData } from 'knex/types/tables';
 import { SimpleWorkflow } from '../../example';
 
 describe('FlowoohRtExecutionService', () => {

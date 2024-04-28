@@ -1,6 +1,6 @@
-import { BaseService } from '@flowooh/data/base/service';
-import { Service } from '@flowooh/data/decorators';
-import { FlowoohRepoDefinitionContentData } from 'knex/types/tables';
+import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositories/definition_contents';
+import { BaseService } from '../base';
+import { Service } from '../decorator';
 
 @Service('flowoohRepoDefinitionContentService')
 export default class FlowoohRepoDefinitionContentService extends BaseService {

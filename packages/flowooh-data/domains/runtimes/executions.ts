@@ -1,8 +1,8 @@
 import { Context, Flowooh, IToken, Token, Workflow } from '@flowooh/core';
-import { BaseService } from '@flowooh/data/base/service';
-import { Service } from '@flowooh/data/decorators';
+import { FlowoohRtExecutionData } from '@flowooh/data/tables/runtimes/executions';
 import { executionRecordId } from '@flowooh/data/utils/uid';
-import { FlowoohRtExecutionData } from 'knex/types/tables';
+import { BaseService } from '../base';
+import { Service } from '../decorator';
 
 @Service('flowoohRtExecutionService')
 export default class FlowoohRtExecutionService extends BaseService {

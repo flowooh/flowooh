@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "references": [
+    {
+      "path": "./flowooh-core/tsconfig.build.json"
+    },
+    {
+      "path": "./flowooh-data/tsconfig.build.json"
+    }
+  ]
+}

@@ -1,7 +1,8 @@
 import { BPMNDefinition, parse } from '@flowooh/core';
-import { BaseService } from '@flowooh/data/base/service';
-import { Service } from '@flowooh/data/decorators';
-import { FlowoohRepoDefinitionContentData, FlowoohRepoDefinitionData } from 'knex/types/tables';
+import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositories/definition_contents';
+import { FlowoohRepoDefinitionData } from '@flowooh/data/tables/repositories/definitions';
+import { BaseService } from '../base';
+import { Service } from '../decorator';
 
 @Service('flowoohRepoDefinitionService')
 export default class FlowoohRepoDefinitionService extends BaseService {

@@ -7,7 +7,8 @@
   "scripts": {
     "test": "jest",
     "build": "tsc -b -v packages",
-    "clean": "tsc -b --clean packages"
+    "clean": "tsc -b --clean packages",
+    "link:data": "cd packages/flowooh-data && npm link"
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",

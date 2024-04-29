@@ -21,8 +21,12 @@ program
 
     // get the data connection
     const data = knex({
-      client: 'sqlite3',
-      connection: { filename: process.env.TEST_SQLITE_DB_PATH as string },
+      client: process.env.FLOWOOH_DATA_DB_CLIENT,
+      connection:
+        process.env.FLOWOOH_DATA_DB_CLIENT === 'sqlite3'
+          ? //
+            { filename: process.env.FLOWOOH_DATA_DB_CONNECTION }
+          : process.env.FLOWOOH_DATA_DB_CONNECTION,
       useNullAsDefault: true,
     });
 

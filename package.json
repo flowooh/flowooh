@@ -18,11 +18,11 @@
     "clean": "tsc -b --clean packages",
     "link:data": "cd packages/flowooh-data && npm link",
     "prerelease": "gulp copy-misc",
-    "publish": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --force-publish --no-private --exact -m \"chore(@flowooh) publish %s release\"",
-    "publish:beta": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --npm-tag=beta --no-private -m \"chore(@flowooh) publish %s release\"",
-    "publish:next": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --npm-tag=next --no-private --skip-git -m \"chore(@flowooh) publish %s release\"",
-    "publish:rc": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --npm-tag=rc --no-private -m \"chore(@flowooh) publish %s release\"",
-    "publish:test": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --force-publish --no-private --npm-tag=test --skip-git -m \"chore(@flowooh) publish %s release\""
+    "publish": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --force-publish --no-private --exact -m \"chore(@flowooh): publish %s release\"",
+    "publish:beta": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --npm-tag=beta --no-private -m \"chore(@flowooh): publish %s release\"",
+    "publish:next": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --npm-tag=next --no-private --skip-git -m \"chore(@flowooh): publish %s release\"",
+    "publish:rc": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --npm-tag=rc --no-private -m \"chore(@flowooh): publish %s release\"",
+    "publish:test": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --force-publish --no-private --npm-tag=test --skip-git -m \"chore(@flowooh): publish %s release\""
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",

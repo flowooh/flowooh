@@ -1,7 +1,7 @@
 {
   "name": "@flowooh/core",
   "version": "0.1.4",
-  "description": "> TODO: description",
+  "description": "a light-weight extensible workflow based on Nodejs",
   "author": "iHeyTang <dehui1012@qq.com>",
   "homepage": "",
   "license": "MIT",

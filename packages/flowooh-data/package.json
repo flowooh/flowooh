@@ -2,6 +2,19 @@
   "name": "@flowooh/data",
   "version": "0.1.5",
   "description": "data api for flowooh",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flowooh/flowooh.git"
+  },
+  "keywords": [
+    "flowooh",
+    "workflow",
+    "workflow-engine",
+    "nodejs",
+    "knex",
+    "database",
+    "typescript"
+  ],
   "author": "iHeyTang <dehui1012@qq.com>",
   "homepage": "",
   "license": "MIT",

@@ -5,6 +5,13 @@
     "type": "git",
     "url": "https://github.com/flowooh/flowooh.git"
   },
+  "keywords": [
+    "flowooh",
+    "workflow",
+    "workflow-engine",
+    "nodejs",
+    "typescript"
+  ],
   "license": "MIT",
   "author": "iHeyTang",
   "workspaces": [

@@ -1,8 +1,13 @@
 #!/usr/bin/env node
-import { program } from 'commander';
 import { config } from 'dotenv';
+config();
+
+import { program } from 'commander';
+import { knex } from 'knex';
 import { down, up } from '../db/schemas';
-import knex = require('knex');
+import { logger } from '../utils/logger';
+
+const log = logger('scripts');
 
 program
   .command('init-db')
@@ -18,26 +23,26 @@ program
     });
 
     if (options.force) {
-      await down(data)
-        .catch((e) => {
-          console.error(e);
-          process.exit(1);
-        })
-        .catch((e) => {
-          console.error('EEEEEEEE', e);
-        });
+      await down(data).catch((e) => {
+        if (e.message.includes('no such table')) {
+          log.warn(e.message);
+          return;
+        }
+        log.error(e);
+        process.exit(1);
+      });
     }
 
     await up(data)
       .catch((e) => {
-        console.error(e);
+        log.error(e);
         process.exit(1);
       })
       .finally(() => {
         data.destroy();
       });
 
-    console.log('Database initialized');
+    log.info('Database initialized');
   });
 
 program.parse(process.argv);

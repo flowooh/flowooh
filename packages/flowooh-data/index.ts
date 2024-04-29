@@ -5,7 +5,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       FLOWOOH_DATA_DB_CLIENT: string;
-      FLOWOOH_DATA_DB_PATH: string;
+      FLOWOOH_DATA_DB_CONNECTION: string;
     }
   }
 }

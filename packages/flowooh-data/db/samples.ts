@@ -1,49 +1,49 @@
-import { Status } from '@flowooh/core';
-import { data as k } from '@flowooh/data/data';
-import { service } from '@flowooh/data/domains';
-import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositories/definition_contents';
-import { FlowoohRepoDefinitionData } from '@flowooh/data/tables/repositories/definitions';
-import { executionRecordId } from '@flowooh/data/utils/uid';
-import { SimpleWorkflow } from '../../example';
+import { knex } from 'knex';
+import { FlowoohRepoDefinitionData } from '../tables/repositories/definitions';
+import { FlowoohRepoDefinitionContentData } from '../tables/repositories/definition_contents';
 
-describe('FlowoohRtExecutionService', () => {
-  const mockDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
-    {
-      id: '1',
-      name: 'Example 1',
-      description: 'This is an example',
-      version: '1.0.0',
-      published: true,
-    },
-    {
-      id: '2',
-      name: 'Example 2',
-      description: 'This is another example',
-      version: '3.0.0',
-      published: false,
-    },
-    {
-      id: '3',
-      name: 'Example 3',
-      description: 'This is yet another example',
-      version: '3.0.0',
-      published: true,
-    },
-    {
-      id: '4',
-      name: 'Example 4',
-      description: 'This is the last example',
-      version: '4.0.0',
-      published: true,
-    },
-  ];
+export async function up(k: knex.Knex<any, unknown[]>) {
+  await k('flowooh_repo_definitions').insert(sampleDefinitions);
+  await k('flowooh_repo_definition_contents').insert(sampleDefinitionContents);
+}
 
-  const mockDefinitionContents: Partial<FlowoohRepoDefinitionContentData>[] = [
-    {
-      id: '1',
-      definition_id: '1',
-      version: '1.0.0',
-      content: `
+const sampleDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
+  {
+    id: '1',
+    name: 'Example 1',
+    description: 'This is an example',
+    version: '1.0.0',
+    published: true,
+  },
+  {
+    id: '2',
+    name: 'Example 2',
+    description: 'This is another example',
+    version: '3.0.0',
+    published: false,
+  },
+  {
+    id: '3',
+    name: 'Example 3',
+    description: 'This is yet another example',
+    version: '3.0.0',
+    published: true,
+  },
+  {
+    id: '4',
+    name: 'Example 4',
+    description: 'This is the last example',
+    version: '4.0.0',
+    published: true,
+  },
+];
+
+const sampleDefinitionContents: Partial<FlowoohRepoDefinitionContentData>[] = [
+  {
+    id: '1',
+    definition_id: '1',
+    version: '1.0.0',
+    content: `
       <?xml version="1.0" encoding="UTF-8"?>
       <bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1ednrq3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="11.4.1">
         <bpmn:collaboration id="Collaboration_0wlp4ym">
@@ -154,17 +154,17 @@ describe('FlowoohRtExecutionService', () => {
           </bpmndi:BPMNPlane>
         </bpmndi:BPMNDiagram>
       </bpmn:definitions>`,
-    },
-    {
-      id: '2',
-      definition_id: '1',
-      version: '2.0.0',
-    },
-    {
-      id: '3',
-      definition_id: '2',
-      version: '3.0.0',
-      content: `
+  },
+  {
+    id: '2',
+    definition_id: '1',
+    version: '2.0.0',
+  },
+  {
+    id: '3',
+    definition_id: '2',
+    version: '3.0.0',
+    content: `
           <bpmn:definitions>
             <bpmn:process id="Process_1igpwhg" isExecutable="false">
                 <bpmn:startEvent id="StartEvent_1ogvy0x" name="Start">
@@ -172,74 +172,10 @@ describe('FlowoohRtExecutionService', () => {
                 </bpmn:startEvent>
             </bpmn:process>
           </bpmn:definitions>`,
-    },
-    {
-      id: '4',
-      definition_id: '2',
-      version: '4.0.0',
-    },
-  ];
-
-  beforeAll(async () => {
-    await k.insert(mockDefinitions).into('flowooh_repo_definitions');
-    await k.insert(mockDefinitionContents).into('flowooh_repo_definition_contents');
-  });
-
-  afterAll(async () => {
-    await k('flowooh_repo_definitions').truncate();
-    await k('flowooh_repo_definition_contents').truncate();
-    await k.destroy();
-  });
-
-  describe('start', () => {
-    it('should start the flowooh', async () => {
-      const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
-      expect(result).toBeDefined();
-    });
-
-    it('should throw an error if target is not provided', async () => {
-      const result = service.rt.execution.start('1', { workflow: undefined as any });
-      expect(result).rejects.toThrow('target is required');
-    });
-
-    it('should throw an error if target is invalid', async () => {
-      const result = service.rt.execution.start('1', { workflow: class {} });
-      expect(result).rejects.toThrow('Invalid target, target should be a Workflow');
-    });
-
-    it('should throw an error if definition is not found', async () => {
-      const result = service.rt.execution.start('5', { workflow: SimpleWorkflow });
-      expect(result).rejects.toThrow('definition not found');
-    });
-
-    it('should get expected data', async () => {
-      const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
-      expect(result.context.data.trace).toEqual(['start', 'task01']);
-    });
-  });
-
-  describe('execute', () => {
-    it('should execute task1 in the flowooh', async () => {
-      const exec = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
-
-      const processInstId = exec.process.$.id;
-      const tokenId = exec.context.tokens[1].id;
-      const execId = executionRecordId(processInstId, tokenId);
-
-      const result = await service.rt.execution.execute(execId, { workflow: SimpleWorkflow });
-
-      expect(result.context.status).toEqual(Status.Paused);
-    });
-
-    it('should execute task02 in the flowooh', async () => {
-      const exec = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
-
-      const processInstId = exec.process.$.id;
-      const tokenId = exec.context.tokens[2].id;
-      const execId = executionRecordId(processInstId, tokenId);
-
-      const result = await service.rt.execution.execute(execId, { workflow: SimpleWorkflow });
-      expect(result.context.status).toEqual(Status.Terminated);
-    });
-  });
-});
+  },
+  {
+    id: '4',
+    definition_id: '2',
+    version: '4.0.0',
+  },
+];

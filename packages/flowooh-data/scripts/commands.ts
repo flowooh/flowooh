@@ -4,6 +4,7 @@ config();
 
 import { program } from 'commander';
 import { knex } from 'knex';
+import { up as upSamples } from '../db/samples';
 import { down, up } from '../db/schemas';
 import { logger } from '../utils/logger';
 
@@ -14,14 +15,18 @@ program
   .description('Initialize the database')
   .option('-e --env <env>', 'Environment to run the script in', '.env')
   .option('--force', 'Force the initialization, dropping the existing tables')
+  .option('--sample', 'Insert sample data')
   .action(async (options) => {
     config({ path: options.env });
+
+    // get the data connection
     const data = knex({
       client: 'sqlite3',
       connection: { filename: process.env.TEST_SQLITE_DB_PATH as string },
       useNullAsDefault: true,
     });
 
+    // drop the tables if force is set
     if (options.force) {
       await down(data).catch((e) => {
         if (e.message.includes('no such table')) {
@@ -33,16 +38,27 @@ program
       });
     }
 
-    await up(data)
-      .catch((e) => {
+    // create the tables
+    await up(data).catch((e) => {
+      log.error(e);
+      process.exit(1);
+    });
+    log.info('Database initialized');
+
+    // insert sample data if sample is set
+    if (options.sample) {
+      await upSamples(data).catch((e) => {
         log.error(e);
         process.exit(1);
-      })
-      .finally(() => {
-        data.destroy();
       });
+      log.info('Sample data inserted');
+    }
 
-    log.info('Database initialized');
+    // destroy the connection
+    await data.destroy().catch((e) => {
+      log.error(e);
+      process.exit(1);
+    });
   });
 
 program.parse(process.argv);

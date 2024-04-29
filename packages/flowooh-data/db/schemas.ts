@@ -1,4 +1,6 @@
 import { knex } from 'knex';
+import { FlowoohRepoDefinitionData } from '../tables/repositories/definitions';
+import { FlowoohRepoDefinitionContentData } from '../tables/repositories/definition_contents';
 
 export async function up(k: knex.Knex<any, unknown[]>) {
   await k.schema.createTable('flowooh_repo_definitions', (table) => {

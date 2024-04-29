@@ -5,7 +5,6 @@ import { FlowoohRepoDefinitionData } from '@flowooh/data/tables/repositories/def
 
 describe('FlowoohRepoDefinitionRepository', () => {
   const mockDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
-    // 生成测试数据
     {
       id: '1',
       name: 'Example 1',

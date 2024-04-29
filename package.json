@@ -1,20 +1,37 @@
 {
-  "name": "root",
-  "private": true,
+  "name": "flowooh",
+  "description": "a light-weight extensible workflow based on Nodejs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flowooh/flowooh.git"
+  },
+  "license": "MIT",
+  "author": "iHeyTang",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "test": "jest",
     "build": "tsc -b -v packages",
+    "postbuild": "npm run move:node_modules",
+    "build:prod": "tsc -b -v packages",
     "clean": "tsc -b --clean packages",
-    "link:data": "cd packages/flowooh-data && npm link"
+    "link:data": "cd packages/flowooh-data && npm link",
+    "prerelease": "gulp copy-misc",
+    "publish": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --force-publish --access public --exact -m \"chore(@flowooh) publish %s release\"",
+    "publish:beta": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --npm-tag=beta --access public -m \"chore(@flowooh) publish %s release\"",
+    "publish:next": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --npm-tag=next --access public --skip-git -m \"chore(@flowooh) publish %s release\"",
+    "publish:rc": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --npm-tag=rc --access public -m \"chore(@flowooh) publish %s release\"",
+    "publish:test": "npm run prerelease && npm run build:prod && ./node_modules/.bin/lerna publish --force-publish --access public --npm-tag=test --skip-git -m \"chore(@flowooh) publish %s release\""
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.12.7",
+    "cli-color": "^2.0.4",
+    "delete-empty": "^3.0.0",
     "dotenv": "^16.4.5",
+    "gulp-clean": "^0.4.0",
     "jest": "^29.7.0",
     "lerna": "^8.1.2",
     "ts-jest": "^29.1.2",
@@ -23,6 +40,8 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "debug": "^4.3.4"
+    "@types/gulp": "^4.0.17",
+    "debug": "^4.3.4",
+    "gulp": "^5.0.0"
   }
 }

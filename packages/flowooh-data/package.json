@@ -4,7 +4,7 @@
   "description": "> TODO: description",
   "author": "iHeyTang <dehui1012@qq.com>",
   "homepage": "",
-  "license": "ISC",
+  "license": "MIT",
   "scripts": {
     "build": "tsc --project tsconfig.build.json"
   },

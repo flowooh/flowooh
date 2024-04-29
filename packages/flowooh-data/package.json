@@ -1,6 +1,6 @@
 {
   "name": "@flowooh/data",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "data api for flowooh",
   "author": "iHeyTang <dehui1012@qq.com>",
   "homepage": "",
@@ -12,7 +12,7 @@
     "flowooh-data": "scripts/commands.js"
   },
   "dependencies": {
-    "@flowooh/core": "0.1.4",
+    "@flowooh/core": "0.1.5",
     "commander": "^12.0.0",
     "inversify": "^6.0.2",
     "knex": "^3.1.0",

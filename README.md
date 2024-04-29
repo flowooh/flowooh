@@ -44,6 +44,21 @@ FLOWOOH_DATA_DB_CLIENT=sqlite3
 FLOWOOH_DATA_DB_CONNECTION=.db/test.sqlite
 ```
 
+#### Init the database
+
+You can use flowooh commands to init the database easily, add a script into package.json, and then run it `npm run init-db`
+
+```json
+{
+  // ...
+  "scripts": {
+    // ...
+    "init-db": "flowooh-data init-db --sample"
+  }
+  //...
+}
+```
+
 #### Completed!
 
 Now, you can use flowooh in your project~

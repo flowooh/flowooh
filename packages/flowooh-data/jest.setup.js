@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const k = knex({
   client: 'sqlite3',
-  connection: { filename: process.env.TEST_SQLITE_DB_PATH },
+  connection: { filename: '.db/test.sqlite' },
   useNullAsDefault: true,
 });
 global.beforeAll(async () => {

@@ -1,6 +1,7 @@
-import { BPMNDefinition, parse } from '@flowooh/core';
+import { BPMNDefinition, Workflow, parse } from '@flowooh/core';
 import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositories/definition_contents';
 import { FlowoohRepoDefinitionData } from '@flowooh/data/tables/repositories/definitions';
+import { genId } from '../../utils/uid';
 import { BaseService } from '../base';
 import { Service } from '../decorator';
 
@@ -80,7 +81,7 @@ export default class FlowoohRepoDefinitionService extends BaseService {
     if (!data.version) throw new Error('version is required');
 
     const defs = await this.k<FlowoohRepoDefinitionData>('flowooh_repo_definitions')
-      .insert({ name: data.name, description: data.description, published: false })
+      .insert({ id: await genId(), name: data.name, description: data.description, published: false })
       .returning('id');
 
     await this.service.repo.definitionContent.createDefinitionContent(defs[0].id, {
@@ -103,19 +104,5 @@ export default class FlowoohRepoDefinitionService extends BaseService {
         name: data.name ?? null,
         description: data.description ?? null,
       });
-  }
-
-  /**
-   * switch published version of a definition
-   * @param id
-   * @param version
-   */
-  async switchVersion(id: string, version: string): Promise<void> {
-    const info = await this.service.repo.definitionContent.getInfo(id, version);
-
-    if (!info) throw new Error('version not found');
-    if (!info.published) throw new Error('version not published');
-
-    await this.k<FlowoohRepoDefinitionData>('flowooh_repo_definitions').where('id', id).update({ version });
   }
 }

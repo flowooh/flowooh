@@ -2,6 +2,7 @@ import { Context } from '@flowooh/core';
 import { FlowoohRtVariableData } from '@flowooh/data/tables/runtimes/variables';
 import { BaseService } from '../base';
 import { Service } from '../decorator';
+import { genId, genIds } from '../../utils/uid';
 
 @Service('flowoohRtVariableService')
 export default class FlowoohRtVariableService extends BaseService {
@@ -15,11 +16,13 @@ export default class FlowoohRtVariableService extends BaseService {
     if (!exec) throw new Error('Execution not found');
     if (exec.parent_id) throw new Error('process data should be saved in root execution');
 
-    const records = Object.keys(context.data).map<Partial<FlowoohRtVariableData>>((key) => {
+    const ids = genIds(Object.keys(context.data).length);
+    const records = Object.keys(context.data).map<Partial<FlowoohRtVariableData>>((key, index) => {
       const { value, valueType } = this.toValue(context.data[key]);
 
       return {
         ...value,
+        id: ids[index],
         proc_instance_id: exec.proc_instance_id,
         proc_definition_id: exec.proc_definition_id,
         execution_id: exec.id,

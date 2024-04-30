@@ -1,4 +1,5 @@
 import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositories/definition_contents';
+import { genId } from '../../utils/uid';
 import { BaseService } from '../base';
 import { Service } from '../decorator';
 
@@ -54,6 +55,7 @@ export default class FlowoohRepoDefinitionContentService extends BaseService {
 
     const c = await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
       .insert({
+        id: await genId(),
         definition_id: defId,
         content: data.content,
         version: data.version,

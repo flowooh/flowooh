@@ -2,6 +2,7 @@ import { data as k } from '@flowooh/data/data';
 import { service } from '@flowooh/data/domains';
 import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositories/definition_contents';
 import { FlowoohRepoDefinitionData } from '@flowooh/data/tables/repositories/definitions';
+import { SimpleWorkflow } from '../../example';
 
 describe('FlowoohRepoDefinitionRepository', () => {
   const mockDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
@@ -181,6 +182,46 @@ describe('FlowoohRepoDefinitionRepository', () => {
       expect(result[0].name).toBe(mockDefinitions[0].name);
       expect(result[1].name).toBe(mockDefinitions[2].name);
       expect(result[2].name).toBe(mockDefinitions[3].name);
+    });
+  });
+
+  describe('getInfo', () => {
+    it('should return the correct definition info', async () => {
+      // Arrange
+      const id = mockDefinitions[0].id!;
+
+      // Act
+      const result = await service.repo.definition.getInfo(id);
+
+      // Assert
+      expect(result).toEqual({
+        id: mockDefinitions[0].id,
+        name: mockDefinitions[0].name,
+        description: mockDefinitions[0].description,
+        version: mockDefinitions[0].version,
+      });
+    });
+
+    it('should return undefined if the definition does not exist', async () => {
+      // Arrange
+      const id = 'nonExistentId';
+
+      // Act
+      const result = await service.repo.definition.getInfo(id);
+
+      // Assert
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw an error if parameters are not provided', async () => {
+      // Arrange
+      const id = '';
+
+      // Act
+      const result = service.repo.definition.getInfo(id);
+
+      // Assert
+      await expect(result).rejects.toThrow('id is required');
     });
   });
 

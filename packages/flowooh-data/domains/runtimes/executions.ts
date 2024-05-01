@@ -1,4 +1,4 @@
-import { Context, Flowooh, IToken, Token, Workflow } from '@flowooh/core';
+import { Context, Flowooh, IToken, Status, Token, Workflow } from '@flowooh/core';
 import { FlowoohRtExecutionData } from '@flowooh/data/tables/runtimes/executions';
 import { executionRecordId } from '@flowooh/data/utils/uid';
 import { BaseService } from '../base';
@@ -93,6 +93,44 @@ export default class FlowoohRtExecutionService extends BaseService {
     return this.k('flowooh_rt_executions').where({ id: executionId }).first();
   }
 
+  /**
+   * Get executions by page
+   * @param options
+   * @returns
+   */
+  async pageExecutions(options: {
+    filters: {
+      /** process instance id */
+      proc_instance_id?: string;
+      /** process definition id */
+      proc_definition_id?: string;
+      /** status */
+      status?: Status;
+    };
+    pagination: {
+      /** current page index */
+      current?: number;
+      /** size of a page */
+      pageSize?: number;
+    };
+  }) {
+    let query = this.k('flowooh_rt_executions');
+    if (options.filters.proc_instance_id) query = query.where('proc_instance_id', options.filters.proc_instance_id);
+    if (options.filters.proc_definition_id) query = query.where('proc_definition_id', options.filters.proc_definition_id);
+    if (options.filters.status) query = query.where('status', options.filters.status);
+
+    const { current = 1, pageSize = 10 } = options.pagination;
+    const total = await query.count();
+    const list = await query.offset((current - 1) * pageSize).limit(pageSize);
+
+    return { total, list };
+  }
+
+  /**
+   * List executions by process instance id
+   * @param processInstanceId
+   * @returns
+   */
   async listExecutionsByProcessInstanceId(processInstanceId: string) {
     return this.k('flowooh_rt_executions').where({ proc_instance_id: processInstanceId });
   }

@@ -1,4 +1,4 @@
-import { BPMNDefinition, Workflow, parse } from '@flowooh/core';
+import { BPMNDefinition, parse } from '@flowooh/core';
 import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositories/definition_contents';
 import { FlowoohRepoDefinitionData } from '@flowooh/data/tables/repositories/definitions';
 import { genId } from '../../utils/uid';
@@ -74,7 +74,9 @@ export default class FlowoohRepoDefinitionService extends BaseService {
    * @returns
    */
   async createDefinition(
-    data: Pick<FlowoohRepoDefinitionData, 'name' | 'description'> & Pick<FlowoohRepoDefinitionContentData, 'content' | 'version'>,
+    data: Pick<FlowoohRepoDefinitionData, 'name'> &
+      Partial<Pick<FlowoohRepoDefinitionData, 'description'>> &
+      Partial<Pick<FlowoohRepoDefinitionContentData, 'content' | 'version'>>,
   ): Promise<string> {
     if (!data.name) throw new Error('name is required');
     if (!data.description) throw new Error('description is required');
@@ -97,12 +99,12 @@ export default class FlowoohRepoDefinitionService extends BaseService {
    * @param id
    * @param data
    */
-  async editDefinitionInfo(id: string, data: Pick<FlowoohRepoDefinitionData, 'name' | 'description'>): Promise<void> {
+  async editDefinitionInfo(id: string, data: Partial<Pick<FlowoohRepoDefinitionData, 'name' | 'description'>>): Promise<void> {
     await this.k<FlowoohRepoDefinitionData>('flowooh_repo_definitions')
       .where('id', id)
       .update({
-        name: data.name ?? null,
-        description: data.description ?? null,
+        name: data.name ?? undefined,
+        description: data.description ?? undefined,
       });
   }
 }

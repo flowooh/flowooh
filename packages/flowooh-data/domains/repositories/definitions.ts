@@ -51,7 +51,7 @@ export default class FlowoohRepoDefinitionService extends BaseService {
     const def = await this.k<FlowoohRepoDefinitionData>('flowooh_repo_definitions').where('id', id).select('id', 'version').first();
     if (!def) return undefined;
 
-    const content = await this.service.repo.definitionContent.getRawContent(def.id, def.version);
+    const content = await this.service.repo.definitionContent.getRawContentByVersion(def.id, def.version);
     return content;
   }
 

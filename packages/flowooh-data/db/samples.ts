@@ -1,6 +1,6 @@
 import { knex } from 'knex';
-import { FlowoohRepoDefinitionData } from '../tables/repositories/definitions';
 import { FlowoohRepoDefinitionContentData } from '../tables/repositories/definition_contents';
+import { FlowoohRepoDefinitionData } from '../tables/repositories/definitions';
 
 export async function up(k: knex.Knex<any, unknown[]>) {
   await k('flowooh_repo_definitions').insert(sampleDefinitions);
@@ -10,6 +10,8 @@ export async function up(k: knex.Knex<any, unknown[]>) {
 const sampleDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
   {
     id: '1',
+    created_at: new Date(),
+    updated_at: new Date(),
     name: 'Example 1',
     description: 'This is an example',
     version: '1.0.0',
@@ -17,6 +19,8 @@ const sampleDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
   },
   {
     id: '2',
+    created_at: new Date(),
+    updated_at: new Date(),
     name: 'Example 2',
     description: 'This is another example',
     version: '3.0.0',
@@ -24,6 +28,8 @@ const sampleDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
   },
   {
     id: '3',
+    created_at: new Date(),
+    updated_at: new Date(),
     name: 'Example 3',
     description: 'This is yet another example',
     version: '3.0.0',
@@ -31,6 +37,8 @@ const sampleDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
   },
   {
     id: '4',
+    created_at: new Date(),
+    updated_at: new Date(),
     name: 'Example 4',
     description: 'This is the last example',
     version: '4.0.0',
@@ -41,6 +49,8 @@ const sampleDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
 const sampleDefinitionContents: Partial<FlowoohRepoDefinitionContentData>[] = [
   {
     id: '1',
+    created_at: new Date(),
+    updated_at: new Date(),
     definition_id: '1',
     version: '1.0.0',
     content: `
@@ -157,11 +167,15 @@ const sampleDefinitionContents: Partial<FlowoohRepoDefinitionContentData>[] = [
   },
   {
     id: '2',
+    created_at: new Date(),
+    updated_at: new Date(),
     definition_id: '1',
     version: '2.0.0',
   },
   {
     id: '3',
+    created_at: new Date(),
+    updated_at: new Date(),
     definition_id: '2',
     version: '3.0.0',
     content: `
@@ -175,6 +189,8 @@ const sampleDefinitionContents: Partial<FlowoohRepoDefinitionContentData>[] = [
   },
   {
     id: '4',
+    created_at: new Date(),
+    updated_at: new Date(),
     definition_id: '2',
     version: '4.0.0',
   },

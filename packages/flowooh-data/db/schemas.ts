@@ -3,6 +3,8 @@ import { knex } from 'knex';
 export async function up(k: knex.Knex<any, unknown[]>) {
   await k.schema.createTable('flowooh_repo_definitions', (table) => {
     table.string('id').primary();
+    table.datetime('created_at');
+    table.datetime('updated_at');
     table.string('name');
     table.string('description');
     table.string('version');
@@ -13,6 +15,8 @@ export async function up(k: knex.Knex<any, unknown[]>) {
 
   await k.schema.createTable('flowooh_repo_definition_contents', (table) => {
     table.string('id').primary();
+    table.datetime('created_at');
+    table.datetime('updated_at');
     table.string('definition_id');
     table.string('version');
     table.string('content');
@@ -21,6 +25,8 @@ export async function up(k: knex.Knex<any, unknown[]>) {
 
   await k.schema.createTable('flowooh_rt_executions', (table) => {
     table.string('id').primary();
+    table.datetime('created_at');
+    table.datetime('updated_at');
     table.string('proc_instance_id');
     table.string('proc_definition_id');
     table.string('execution_id');
@@ -31,6 +37,8 @@ export async function up(k: knex.Knex<any, unknown[]>) {
 
   await k.schema.createTable('flowooh_rt_variables', (table) => {
     table.string('id').primary();
+    table.datetime('created_at');
+    table.datetime('updated_at');
     table.string('proc_instance_id');
     table.string('proc_definition_id');
     table.string('execution_id');

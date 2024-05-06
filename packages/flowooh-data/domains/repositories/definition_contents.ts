@@ -9,10 +9,12 @@ export default class FlowoohRepoDefinitionContentService extends BaseService {
    * get list of workflow definitions
    * @returns
    */
-  async listDefinitionContents(params: { definitionId: string }): Promise<Pick<FlowoohRepoDefinitionContentData, 'version'>[]> {
+  async listDefinitionContents(params: {
+    definitionId: string;
+  }): Promise<Pick<FlowoohRepoDefinitionContentData, 'id' | 'version' | 'published' | 'created_at' | 'updated_at'>[]> {
     const res = await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
       .where('definition_id', params.definitionId)
-      .select('id', 'version');
+      .select('id', 'version', 'published', 'created_at', 'updated_at');
     return res;
   }
 
@@ -20,12 +22,19 @@ export default class FlowoohRepoDefinitionContentService extends BaseService {
     const res = await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
       .where('definition_id', defId)
       .where('version', version)
-      .select('id', 'published')
+      .select('id', 'version', 'published', 'created_at', 'updated_at')
       .first();
     return res;
   }
 
-  async getRawContent(defId: string, version: string): Promise<string | undefined> {
+  async getRawContentById(id: string): Promise<string | undefined> {
+    if (!id) throw new Error('defId is required');
+    const def = await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents').where('id', id).select('content').first();
+
+    return def?.content;
+  }
+
+  async getRawContentByVersion(defId: string, version: string): Promise<string | undefined> {
     if (!defId) throw new Error('defId is required');
     if (!version) throw new Error('version is required');
 

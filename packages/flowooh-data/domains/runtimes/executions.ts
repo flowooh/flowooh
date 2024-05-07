@@ -118,12 +118,20 @@ export default class FlowoohRtExecutionService extends BaseService {
     if (options.filters.proc_instance_id) query = query.where('proc_instance_id', options.filters.proc_instance_id);
     if (options.filters.proc_definition_id) query = query.where('proc_definition_id', options.filters.proc_definition_id);
     if (options.filters.status) query = query.where('status', options.filters.status);
-
     const { current = 1, pageSize = 10 } = options.pagination;
-    const total = await query.count();
-    const list = await query.offset((current - 1) * pageSize).limit(pageSize);
+    const [list, total] = await Promise.all([
+      query
+        .clone()
+        .offset((current - 1) * pageSize)
+        .limit(pageSize),
+      query
+        .clone()
+        .count()
+        .first()
+        .then((r) => r?.count),
+    ]);
 
-    return { total, list };
+    return { total: total || 0, list };
   }
 
   /**

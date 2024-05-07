@@ -1,4 +1,5 @@
 import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositories/definition_contents';
+import dayjs from 'dayjs';
 import { genId } from '../../utils/uid';
 import { BaseService } from '../base';
 import { Service } from '../decorator';
@@ -53,7 +54,13 @@ export default class FlowoohRepoDefinitionContentService extends BaseService {
    * @param data
    * @returns
    */
-  async createDefinitionContent(defId: string, data: Pick<FlowoohRepoDefinitionContentData, 'version' | 'content'>): Promise<string> {
+  async createDefinitionContent(defId: string, data: Partial<Pick<FlowoohRepoDefinitionContentData, 'version' | 'content'>>): Promise<string> {
+    if (!data.content) {
+      data.content = '';
+    }
+    if (!data.version) {
+      data.version = dayjs().unix().toString();
+    }
     const latest = await this.k<FlowoohRepoDefinitionContentData>('flowooh_repo_definition_contents')
       .where('definition_id', defId)
       .orderBy('version', 'desc')

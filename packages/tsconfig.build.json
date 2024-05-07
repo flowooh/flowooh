@@ -17,6 +17,7 @@
     "allowJs": false,
     "strict": true,
     "strictNullChecks": false,
+    "esModuleInterop": true,
     "types": ["node"]
   }
 }

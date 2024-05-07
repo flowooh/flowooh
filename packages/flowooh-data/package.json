@@ -37,6 +37,9 @@
     "sinon": "^17.0.1",
     "sqlite3": "^5.1.7"
   },
+  "peerDependencies": {
+    "@flowooh/core": "0.1.8"
+  },
   "publishConfig": {
     "access": "public"
   }

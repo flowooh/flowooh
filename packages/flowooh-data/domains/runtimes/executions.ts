@@ -104,7 +104,7 @@ export default class FlowoohRtExecutionService extends BaseService {
       /** process definition id */
       proc_definition_id?: string;
       /** status */
-      status?: Status;
+      statuses?: Status[];
     };
     pagination: {
       /** current page index */
@@ -116,7 +116,7 @@ export default class FlowoohRtExecutionService extends BaseService {
     let query = this.k('flowooh_rt_executions');
     if (options.filters.proc_instance_id) query = query.where('proc_instance_id', options.filters.proc_instance_id);
     if (options.filters.proc_definition_id) query = query.where('proc_definition_id', options.filters.proc_definition_id);
-    if (options.filters.status) query = query.where('status', options.filters.status);
+    if (options.filters.statuses?.length) query = query.whereIn('status', options.filters.statuses);
     const { current = 1, pageSize = 10 } = options.pagination;
     const [list, total] = await Promise.all([
       query

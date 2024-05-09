@@ -1,6 +1,6 @@
 import { Context, Flowooh, IToken, Status, Token, Workflow } from '@flowooh/core';
 import { FlowoohRtExecutionData } from '@flowooh/data/tables/runtimes/executions';
-import { executionRecordId } from '@flowooh/data/utils/uid';
+import { executionRecordId, genId } from '@flowooh/data/utils/uid';
 import { BaseService } from '../base';
 import { Service } from '../decorator';
 
@@ -21,14 +21,13 @@ export default class FlowoohRtExecutionService extends BaseService {
     if (!schema) throw new Error('definition not found');
 
     const instance = Flowooh.build({ context: Context.build({ data: options.data }) });
-
     const exec = await instance.execute({
       value: value,
       factory: () => new (workflow as any)(),
       schema: schema,
     });
 
-    await this.save(definitionId, exec.process.$.id, exec.context);
+    await this.save(definitionId, await genId(), exec.context);
     return exec;
   }
 
@@ -60,7 +59,7 @@ export default class FlowoohRtExecutionService extends BaseService {
       node: { id: execution.act_id },
     });
 
-    await this.save(execution.proc_definition_id, exec.process.$.id, exec.context);
+    await this.save(execution.proc_definition_id, execution.proc_instance_id, exec.context);
     return exec;
   }
 

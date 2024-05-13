@@ -7,5 +7,5 @@ export interface DefinitionContainer {
 
 /* It's a container for BPMN elements. */
 export interface ElementContainer {
-  [id: string]: { [id: string]: WrappedElement };
+  [processId: string]: { [eleId: string]: WrappedElement };
 }

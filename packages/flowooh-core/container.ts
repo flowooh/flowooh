@@ -8,37 +8,37 @@ export class Container {
   private static definitions: DefinitionContainer = {};
 
   /**
-   * It adds an element to the elements object
+   * It adds an element to the elements object, if the element has a name property, it will be added with that name
    *
-   * @param {string} id - string - The id of the process
+   * @param {string} processId - string - The id of the process
    * @param {WrappedElement} data - element: BPMNElement; key: string
    */
-  public static addElement(id: string, data: WrappedElement) {
-    Container.elements[id] = Container.elements[id] ?? {};
+  public static addElement(processId: string, data: WrappedElement) {
+    Container.elements[processId] = Container.elements[processId] ?? {};
 
     const $ = data.element.$;
-    Container.elements[id][$.id] = data;
+    Container.elements[processId][$.id] = data;
 
-    if ($.name) Container.elements[id][$.name] = data;
+    if ($.name) Container.elements[processId][$.name] = data;
 
-    log.info(`Process ${id} element ${$.id} added to the container`);
+    log.info(`Process ${processId} element ${$.id} added to the container`);
   }
 
   /**
    * If the identity object has an id property, return the element with that id, otherwise if it has a
    * name property, return the element with that name
    *
-   * @param {string} id - The ID of the process.
+   * @param {string} processId - The ID of the process.
    * @param {IdentityOptions} identity - IdentityOptions of element
    *
    * @returns The element of the user with the given identity.
    */
-  public static getElement(id: string, identity: IdentityOptions) {
-    const key = identity.id;
-    const value = Container.elements[id]?.[key];
+  public static getElement(processId: string, identity: IdentityOptions) {
+    const key = 'id' in identity ? identity.id : identity.name;
+    const value = Container.elements[processId]?.[key];
 
-    if (value) log.hit(`Getting process ${id} element identity ${key}`);
-    else log.miss(`Getting process ${id} element identity ${key}`);
+    if (value) log.hit(`Getting process ${processId} element identity ${key}`);
+    else log.miss(`Getting process ${processId} element identity ${key}`);
 
     return value;
   }
@@ -46,16 +46,19 @@ export class Container {
   /**
    * It deletes an element from the elements object
    *
-   * @param {string} id - The ID of the process.
+   * @param {string} processId - The ID of the process.
    * @param {IdentityOptions} identity - IdentityOptions of element
    */
-  public static delElement(id: string, identity?: IdentityOptions) {
+  public static delElement(processId: string, identity?: IdentityOptions) {
     if (identity) {
-      if ('id' in identity) delete Container.elements[id]?.[identity.id];
-    } else delete Container.elements[id];
+      if ('id' in identity) delete Container.elements[processId]?.[identity.id];
+      if ('name' in identity) delete Container.elements[processId]?.[identity.name];
+    } else {
+      delete Container.elements[processId];
+    }
 
-    const key = identity?.id;
-    log.info(`Process ${id} element identity ${key ?? id} deleted from the container`);
+    const key = identity ? ('id' in identity ? identity.id : identity.name) : undefined;
+    log.info(`Process ${processId} element identity ${key ?? processId} deleted from the container`);
   }
 
   /**

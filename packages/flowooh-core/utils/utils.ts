@@ -31,7 +31,8 @@ export const getWrappedBPMNElement = (process: BPMNProcess, identity: IdentityOp
       if (typeof elements === 'object' && Array.isArray(elements)) {
         for (const element of elements) {
           if (!Container.getElement(process.$.id, element.$)) Container.addElement(process.$.id, { key, element });
-          if (element.$.id === identity.id) return { key, element };
+          if ('id' in identity && element.$.id === identity.id) return { key, element };
+          if ('name' in identity && element.$.name === identity.name) return { key, element };
         }
       }
     }
@@ -40,12 +41,15 @@ export const getWrappedBPMNElement = (process: BPMNProcess, identity: IdentityOp
 
 export const getBPMNProcess = (definition: BPMNDefinition, identity: IdentityOptions) => {
   const processes = definition['bpmn:process'];
-  return processes.find((process) => process.$.id === identity.id);
+
+  if ('id' in identity) return processes.find((process) => process.$.id === identity.id);
+  return processes.find((process) => process.$.name === identity.name);
 };
 
 export const takeOutgoing = (outgoing: Sequence[], identity?: IdentityOptions) => {
   if (identity) {
-    return outgoing?.filter((o) => o.targetRef?.id === identity.id).map((o) => o.targetRef!);
+    if ('id' in identity) return outgoing?.filter((o) => o.targetRef?.id === identity.id).map((o) => o.targetRef!);
+    return outgoing?.filter((o) => o.targetRef?.name === identity.name).map((o) => o.targetRef!);
   }
   return outgoing?.map((o) => o.targetRef!);
 };

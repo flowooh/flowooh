@@ -31,7 +31,7 @@ describe('Context', () => {
     expect(tokens).toEqual([token1]);
   });
 
-  it('should delete tokens based on identity options', () => {
+  it('should delete tokens based on identity options-id', () => {
     const token1 = new Token({ id: 'token1' });
     token1.push(new State({ ref: 'state1' }));
     const token2 = new Token({ id: 'token2' });
@@ -40,6 +40,18 @@ describe('Context', () => {
     context.addToken(token2);
 
     context.delTokens({ id: 'state1' });
+    expect(context.tokens).toEqual([token2]);
+  });
+
+  it('should delete tokens based on identity options-name', () => {
+    const token1 = new Token({ id: 'token1' });
+    token1.push(new State({ ref: 'state1', name: 'stateName1' }));
+    const token2 = new Token({ id: 'token2' });
+    token2.push(new State({ ref: 'state2' }));
+    context.addToken(token1);
+    context.addToken(token2);
+
+    context.delTokens({ name: 'stateName1' });
     expect(context.tokens).toEqual([token2]);
   });
 

@@ -10,7 +10,7 @@ export type $ = {
   name?: string;
 };
 
-export type IdentityOptions = { id: string };
+export type IdentityOptions = { id: string } | { name: string };
 
 export type ProcessOptions = { xml: string } | { path: string } | { schema: BPMNDefinition };
 

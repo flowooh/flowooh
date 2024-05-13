@@ -35,7 +35,8 @@ export class Context<D = any, SV = any> implements IContext<D, SV>, Serializable
   }
 
   getTokens(identity: IdentityOptions) {
-    return this.tokens.filter((token) => token.state.ref === identity.id);
+    if ('id' in identity) return this.tokens.filter((token) => token.state.ref === identity.id);
+    if ('name' in identity) return this.tokens.filter((token) => token.state.name === identity.name);
   }
 
   delTokens(identity: IdentityOptions) {

@@ -6,7 +6,9 @@ export function Node(options: IdentityOptions & { pause?: true }) {
   return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const nodes = Reflect.getOwnMetadata(NodeKey, target, '$__metadata__') ?? {};
 
-    nodes[options.id] = { options, propertyName };
+    if ('id' in options) nodes[options.id] = { options, propertyName };
+    else if ('name' in options) nodes[options.name] = { options, propertyName };
+
     Reflect.defineMetadata(NodeKey, nodes, target, '$__metadata__');
 
     const method = descriptor.value;

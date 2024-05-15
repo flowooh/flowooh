@@ -8,6 +8,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "useUnknownInCatchVariables": false,
+    "esModuleInterop": true,
     "target": "ES2021",
     "sourceMap": true,
     "allowJs": false,

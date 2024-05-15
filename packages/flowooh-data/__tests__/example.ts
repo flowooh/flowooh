@@ -11,7 +11,7 @@ export class SimpleWorkflow extends Workflow {
     return data && value;
   }
 
-  @Node({ id: 'Activity_0xzkax6' })
+  @Node({ name: 'Task01' })
   public task01(@Act() activity: TaskActivity, @Param('data') data: any, @Ctx() context: Context) {
     activity.takeOutgoing({ pause: true });
 

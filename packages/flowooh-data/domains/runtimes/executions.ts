@@ -21,14 +21,15 @@ export default class FlowoohRtExecutionService extends BaseService {
     if (!schema) throw new Error('definition not found');
 
     const instance = Flowooh.build({ context: Context.build({ data: options.data }) });
-    const exec = await instance.execute({
+    const execution = await instance.execute({
       value: value,
       factory: () => new (workflow as any)(),
       schema: schema,
     });
 
-    await this.save(definitionId, await genId(), exec.context);
-    return exec;
+    const processInstanceId = await genId();
+    const executionRecordIds = await this.save(definitionId, processInstanceId, execution.context);
+    return { execution, processInstanceId, executionRecordIds };
   }
 
   async execute(executionId: string, options: { value?: any; workflow: typeof Workflow }) {
@@ -36,12 +37,12 @@ export default class FlowoohRtExecutionService extends BaseService {
     if (!workflow) throw new Error('target is required');
     if (!(workflow.prototype instanceof Workflow)) throw new Error('Invalid target, target should be a Workflow');
 
-    const execution = await this.getExecutionById(executionId);
-    if (!execution) throw new Error('Execution not found');
+    const originExecution = await this.getExecutionById(executionId);
+    if (!originExecution) throw new Error('Execution not found');
 
     const data = await this.service.rt.variable.getVariablesByExecution(executionId);
-    const schema = await this.service.repo.definition.getBpmnDefinition(execution.proc_definition_id);
-    const executions = await this.listExecutionsByProcessInstanceId(execution.proc_instance_id);
+    const schema = await this.service.repo.definition.getBpmnDefinition(originExecution.proc_definition_id);
+    const executions = await this.listExecutionsByProcessInstanceId(originExecution.proc_instance_id);
     const tokens: IToken[] = executions.map((exec) => {
       return Token.build({
         parent: exec.parent_id,
@@ -52,15 +53,15 @@ export default class FlowoohRtExecutionService extends BaseService {
 
     const instance = Flowooh.build({ context: new Context({ data, tokens: tokens }) });
 
-    const exec = await instance.execute({
+    const execution = await instance.execute({
       value: value,
       factory: () => new (workflow as any)(),
       schema: schema,
-      node: { id: execution.act_id },
+      node: { id: originExecution.act_id },
     });
 
-    await this.save(execution.proc_definition_id, execution.proc_instance_id, exec.context);
-    return exec;
+    const executionRecordIds = await this.save(originExecution.proc_definition_id, originExecution.proc_instance_id, execution.context);
+    return { execution, executionRecordIds };
   }
 
   async save(processDefId: string, processInstId: string, context: Context) {
@@ -81,6 +82,7 @@ export default class FlowoohRtExecutionService extends BaseService {
     await this.k('flowooh_rt_executions').delete().where({ proc_instance_id: processInstId });
     await this.k('flowooh_rt_executions').insert(executionRecords);
     await this.service.rt.variable.saveProcessInstanceData(rootExec.id!, context);
+    return executionRecords.map((exec) => exec.id);
   }
 
   /**

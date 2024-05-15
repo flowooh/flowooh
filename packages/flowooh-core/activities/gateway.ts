@@ -1,7 +1,7 @@
-import { Activity, Sequence } from '@flowooh/core/base';
-import { Status, Token } from '@flowooh/core/context';
 import { BPMNGateway, BPMNProcess, BPMNSequenceFlow, GoOutInterface, IdentityOptions } from '@flowooh/core/types';
 import { getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
+import { Activity, Sequence } from '../base';
+import { Status, Token } from '../context';
 
 export enum GatewayType {
   Complex = 'complex',

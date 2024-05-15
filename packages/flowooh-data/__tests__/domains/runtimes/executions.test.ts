@@ -5,6 +5,7 @@ import { FlowoohRepoDefinitionContentData } from '@flowooh/data/tables/repositor
 import { FlowoohRepoDefinitionData } from '@flowooh/data/tables/repositories/definitions';
 import { executionRecordId } from '@flowooh/data/utils/uid';
 import { SimpleWorkflow } from '../../example';
+import { getActivity, getWrappedBPMNElement } from '@flowooh/core/utils';
 
 describe('FlowoohRtExecutionService', () => {
   const mockDefinitions: Partial<FlowoohRepoDefinitionData>[] = [
@@ -214,32 +215,23 @@ describe('FlowoohRtExecutionService', () => {
 
     it('should get expected data', async () => {
       const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
-      expect(result.context.data.trace).toEqual(['start', 'task01']);
+      expect(result.execution.context.data.trace).toEqual(['start', 'task01']);
     });
   });
 
   describe('execute', () => {
     it('should execute task1 in the flowooh', async () => {
-      const exec = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
-
-      const processInstId = exec.process.$.id;
-      const tokenId = exec.context.tokens[1].id;
-      const execId = executionRecordId(processInstId, tokenId);
-
-      const result = await service.rt.execution.execute(execId, { workflow: SimpleWorkflow });
-
-      expect(result.context.status).toEqual(Status.Paused);
+      const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
+      const tokens = result.execution.context.tokens.filter((t) => t.isPaused());
+      const result2 = await service.rt.execution.execute(executionRecordId(result.processInstanceId, tokens[0].id), { workflow: SimpleWorkflow });
+      expect(result2.execution.context.status).toEqual(Status.Paused);
     });
 
     it('should execute task02 in the flowooh', async () => {
-      const exec = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
-
-      const processInstId = exec.process.$.id;
-      const tokenId = exec.context.tokens[2].id;
-      const execId = executionRecordId(processInstId, tokenId);
-
-      const result = await service.rt.execution.execute(execId, { workflow: SimpleWorkflow });
-      expect(result.context.status).toEqual(Status.Terminated);
+      const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
+      const tokens = result.execution.context.tokens.filter((t) => t.isPaused());
+      const result2 = await service.rt.execution.execute(executionRecordId(result.processInstanceId, tokens[1].id), { workflow: SimpleWorkflow });
+      expect(result2.execution.context.status).toEqual(Status.Terminated);
     });
   });
 });

@@ -23,6 +23,9 @@ export class TaskActivity extends Activity {
     super(process, data, key);
   }
 
+  /**
+   * Get all boundary events attached to this task
+   */
   get attachments(): EventActivity[] {
     const boundaries = (this.process['bpmn:boundaryEvent'] ?? [])
       .filter((e) => e.$.attachedToRef === this.$.id)

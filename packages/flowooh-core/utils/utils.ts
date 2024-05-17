@@ -46,7 +46,11 @@ export const getBPMNProcess = (definition: BPMNDefinition, identity: IdentityOpt
   return processes.find((process) => process.$.name === identity.name);
 };
 
-export const takeOutgoing = (outgoing: Sequence[], identity?: IdentityOptions) => {
+/**
+ * It accepts an array of {@link Sequence} object, and returns an array of ${@link Activity} object.
+ * If the identity is provided, it will filter the outgoing sequence flow based on the identity.
+ */
+export const takeOutgoing = (outgoing: Sequence[], identity?: IdentityOptions): Activity[] | undefined => {
   if (identity) {
     if ('id' in identity) return outgoing?.filter((o) => o.targetRef?.id === identity.id).map((o) => o.targetRef!);
     return outgoing?.filter((o) => o.targetRef?.name === identity.name).map((o) => o.targetRef!);

@@ -14,7 +14,3 @@ export type IdentityOptions = { id: string } | { name: string };
 
 export type ProcessOptions = { xml: string } | { path: string } | { schema: BPMNDefinition };
 
-export interface GoOutInterface {
-  activity: Activity;
-  pause?: boolean | string;
-}

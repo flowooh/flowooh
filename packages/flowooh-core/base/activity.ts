@@ -1,5 +1,5 @@
 import { Context, State, Status, Token } from '@flowooh/core/context';
-import { BPMNActivity, BPMNProcess, BPMNSequenceFlow, GoOutInterface, IdentityOptions } from '@flowooh/core/types';
+import { BPMNActivity, BPMNProcess, BPMNSequenceFlow, IdentityOptions } from '@flowooh/core/types';
 import { getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
 import { Attribute } from './attribute';
 import { Sequence } from './sequence';
@@ -19,7 +19,10 @@ export class Activity extends Attribute {
     this.key = key;
   }
 
-  get incoming() {
+  /**
+   * returns an array of ${@link Sequence} object that INCOME to the current activity
+   */
+  get incoming(): Sequence[] {
     const flows = this['bpmn:incoming']
       ?.map((id: string) => {
         const flow = getWrappedBPMNElement(this.process, { id })?.element;
@@ -29,6 +32,9 @@ export class Activity extends Attribute {
     return flows;
   }
 
+  /**
+   * returns an array of ${@link Sequence} object that OUTCOME from the current activity
+   */
   get outgoing(): Sequence[] {
     return this['bpmn:outgoing']
       ?.map((id: string) => {
@@ -38,6 +44,10 @@ export class Activity extends Attribute {
       .filter((f) => f instanceof Sequence) as Sequence[];
   }
 
+  /**
+   * It accepts SPECIFIED outgoing sequence flow from the current activity, and creates a new token for each sequence flow,
+   * and "pause" is a boolean indicating whether the activity should be paused or not.
+   */
   takeOutgoing(options?: { identity?: IdentityOptions; pause?: boolean | string }) {
     if (!this.outgoing || !this.outgoing?.length) return;
 
@@ -48,6 +58,10 @@ export class Activity extends Attribute {
     this.goOut(outgoing.map((out) => ({ activity: out, pause: options?.pause })));
   }
 
+  /**
+   * It accepts SPECIFIED outgoing sequences flow from the current activity, and creates multiple new token for each sequence flow,
+   * and "pause" is a boolean indicating whether the activity should be paused or not.
+   */
   takeOutgoings(options: { identity?: IdentityOptions; pause?: boolean | string }[]) {
     if (!this.outgoing || !this.outgoing?.length) return;
 
@@ -63,6 +77,9 @@ export class Activity extends Attribute {
     this.goOut(Object.values(outgoing));
   }
 
+  /**
+   * This function handles outgoing transitions for each token in a workflow system.
+   */
   protected goOut(outgoing: GoOutInterface[]) {
     const pause = (out: GoOutInterface) =>
       typeof out!.pause === 'string' ? out!.pause === out!.activity.id || out!.pause === out!.activity.name : out!.pause;
@@ -114,4 +131,9 @@ export class Activity extends Attribute {
   static build(el: BPMNActivity, process: BPMNProcess, key?: string) {
     return new Activity(process, { ...el }, key);
   }
+}
+
+export interface GoOutInterface {
+  activity: Activity;
+  pause?: boolean | string;
 }

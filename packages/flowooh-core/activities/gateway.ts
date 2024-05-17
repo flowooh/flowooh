@@ -1,13 +1,18 @@
-import { BPMNGateway, BPMNProcess, BPMNSequenceFlow, GoOutInterface, IdentityOptions } from '@flowooh/core/types';
+import { Activity, GoOutInterface, Sequence } from '@flowooh/core/base';
+import { Status, Token } from '@flowooh/core/context';
+import { BPMNGateway, BPMNProcess, BPMNSequenceFlow, IdentityOptions } from '@flowooh/core/types';
 import { getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
-import { Activity, Sequence } from '../base';
-import { Status, Token } from '../context';
 
 export enum GatewayType {
-  Complex = 'complex',
+  /** execute multiple branches in parallel or merge multiple branches in the process flow */
   Parallel = 'parallel',
+  /** allowing MULTIPLE outgoing paths to be executed based on the conditions */
   Inclusive = 'inclusive',
+  /** XOR gateway, allowing ONLY ONE outgoing path to be selected */
   Exclusive = 'exclusive',
+  /** Allowing for exclusive choices based on multiple conditions */
+  Complex = 'complex',
+  /** Used to execute different paths in the process flow based on triggered events, similar to event-driven processes */
   EventBased = 'eventBased',
 }
 
@@ -22,17 +27,24 @@ export class GatewayActivity extends Activity {
     let outgoing: Activity[] | undefined = takeOutgoing(this.outgoing, identity);
 
     switch (this.type) {
-      case GatewayType.Complex:
+      case GatewayType.Complex: {
         break;
-
-      case GatewayType.Parallel:
+      }
+      case GatewayType.Parallel: {
         if (this.context && this.token) {
           const tokens = this.context.getTokens({ id: this.id });
 
           if (tokens?.length !== this.incoming?.length) {
+            // if there are multiple incoming flows, and the number of tokens is not equal to the number of incoming flows,
+            // it means that the gateway has not received ALL the tokens from the incoming flows
+            // so we pause the gateway, and wait for the rest of the tokens
             this.token.pause();
             return;
           } else if (this.incoming.length > 1) {
+            // if there are multiple incoming flows, it should terminate all the incoming tokens, and create a new token
+            // when there is only one incoming path, it has no confusion, and the token can be passed directly
+            // but when there are multiple incoming paths, it cannot specify which token to pass to the outgoing path
+            // so it is necessary to terminate all the incoming tokens
             tokens.forEach((t) => {
               t.locked = true;
               t.status = Status.Terminated;
@@ -45,21 +57,28 @@ export class GatewayActivity extends Activity {
           outgoing = outgoing ?? takeOutgoing(this.outgoing);
         }
         break;
+      }
 
-      case GatewayType.Inclusive:
+      case GatewayType.Inclusive: {
         break;
-
-      case GatewayType.Exclusive:
-        if (outgoing && outgoing.length !== 1) outgoing = this.default?.targetRef ? [this.default.targetRef] : undefined;
+      }
+      case GatewayType.Exclusive: {
+        if (outgoing && outgoing.length !== 1) {
+          outgoing = this.default?.targetRef ? [this.default.targetRef] : undefined;
+        }
         break;
-
-      case GatewayType.EventBased:
+      }
+      case GatewayType.EventBased: {
         break;
+      }
     }
 
     return outgoing;
   }
 
+  /**
+   * rewrite {@link Activity#takeOutgoing}
+   */
   takeOutgoing(options: { identity?: IdentityOptions; pause?: boolean | string }) {
     if (!this.outgoing || !this.outgoing?.length) return;
 
@@ -70,6 +89,9 @@ export class GatewayActivity extends Activity {
     this.goOut(outgoing.map((out) => ({ activity: out, pause: options?.pause })));
   }
 
+  /**
+   * rewrite {@link Activity#takeOutgoings}
+   */
   takeOutgoings(options: { identity?: IdentityOptions; pause?: boolean | string }[]) {
     if (!this.outgoing || !this.outgoing?.length) return;
 

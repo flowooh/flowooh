@@ -1,7 +1,9 @@
 import { Activity, GoOutInterface, Sequence } from '@flowooh/core/base';
 import { Status, Token } from '@flowooh/core/context';
 import { BPMNGateway, BPMNProcess, BPMNSequenceFlow, IdentityOptions } from '@flowooh/core/types';
-import { getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
+import { getWrappedBPMNElement, logger, takeOutgoing } from '@flowooh/core/utils';
+
+const log = logger('gateway');
 
 export enum GatewayType {
   /** execute multiple branches in parallel or merge multiple branches in the process flow */
@@ -60,11 +62,28 @@ export class GatewayActivity extends Activity {
       }
 
       case GatewayType.Inclusive: {
+        const matchedSequences = this.outgoing?.filter((out) => out.condition(this.context?.data));
+        if (matchedSequences.length >= 1) {
+          outgoing = takeOutgoing(matchedSequences);
+        } else {
+          outgoing = this.default ? takeOutgoing([this.default]) : undefined;
+        }
         break;
       }
+
       case GatewayType.Exclusive: {
-        if (outgoing && outgoing.length !== 1) {
-          outgoing = this.default?.targetRef ? [this.default.targetRef] : undefined;
+        const matchedSequences = this.outgoing?.filter((out) => out.condition(this.context?.data));
+        if (matchedSequences.length > 1) {
+          log.warn(`Multiple outgoing paths were matched for the gateway ${this.id}: ${matchedSequences.map((out) => out.id)}`);
+          if (matchedSequences.some((s) => s.id === this.default?.id)) {
+            outgoing = this.default ? takeOutgoing([this.default]) : undefined;
+          } else {
+            outgoing = takeOutgoing([matchedSequences[0]]);
+          }
+        } else if (matchedSequences.length === 1) {
+          outgoing = takeOutgoing(matchedSequences);
+        } else {
+          outgoing = this.default ? takeOutgoing([this.default]) : undefined;
         }
         break;
       }

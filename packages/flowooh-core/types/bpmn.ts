@@ -118,6 +118,15 @@ export type BPMNGateway = BPMNElement & {
   'bpmn:outgoing': string[];
 };
 
+export type BPMNConditionExpression = BPMNElement & {
+  $: {
+    'xsi:type': string;
+    language: string;
+  };
+} & {
+  _: string;
+};
+
 export type BPMNActivity =
   | BPMNGateway
   | BPMNEvent

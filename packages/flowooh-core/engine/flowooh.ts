@@ -180,8 +180,12 @@ export class Flowooh {
     const { data, value } = options;
 
     const nodes = Reflect.getMetadata(NodeKey, this.target, '$__metadata__');
+    let node!: { options: IdentityOptions; propertyName: string };
+    if (activity.name) node = nodes[activity.name];
+    if (!node && activity.id) node = nodes[activity.id];
+
     const runOptions: { method: string; options: MethodOptions } = {
-      method: nodes[activity.id]?.propertyName ?? '',
+      method: node?.propertyName ?? '',
       options: { activity, token, context, data: data ?? context.data, value },
     };
     let is_first_iteration = true;

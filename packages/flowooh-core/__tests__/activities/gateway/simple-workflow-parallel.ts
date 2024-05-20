@@ -10,8 +10,8 @@ export class SimpleWorkflowParallel extends Workflow {
     activity.takeOutgoing();
   }
 
-  @Node({ name: 'TaskB' })
-  public taskB(@Act() activity: EventActivity, @Ctx() context: Context, @Data() data: any, @Value() value: any) {
-    activity.takeOutgoing({ pause: true });
+  @Node({ name: 'TaskB2' })
+  public taskB2(@Act() activity: EventActivity, @Ctx() context: Context, @Data() data: any, @Value() value: any) {
+    activity.takeOutgoing();
   }
 }

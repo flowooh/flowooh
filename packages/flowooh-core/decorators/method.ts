@@ -2,7 +2,7 @@ import { IdentityOptions, MethodOptions } from '@flowooh/core/types';
 import { NodeKey, ParamKey } from '@flowooh/core/utils';
 import { ParamType } from './params';
 
-export function Node(options: IdentityOptions & { pause?: true }) {
+export function Node(options: IdentityOptions & { pause?: boolean }) {
   return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const nodes = Reflect.getOwnMetadata(NodeKey, target, '$__metadata__') ?? {};
 

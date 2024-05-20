@@ -1,4 +1,4 @@
-import { Activity } from '@flowooh/core/base';
+import { Activity, GoOutInterface } from '@flowooh/core/base';
 import { BPMNProcess, BPMNTask } from '@flowooh/core/types';
 import { getActivity, getWrappedBPMNElement } from '@flowooh/core/utils';
 import { EventActivity } from './event';
@@ -21,6 +21,17 @@ export class TaskActivity extends Activity {
 
   constructor(process: BPMNProcess, data?: Partial<TaskActivity>, key?: string) {
     super(process, data, key);
+  }
+
+  protected pause(out: GoOutInterface): boolean {
+    if (!out) return false;
+
+    let flag = false;
+    if (out.activity instanceof TaskActivity && out.activity.taskType === TaskType.User) {
+      flag = true;
+    }
+    const superFlag = super.pause(out);
+    return typeof superFlag === 'boolean' ? superFlag : flag;
   }
 
   /**

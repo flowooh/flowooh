@@ -3,6 +3,7 @@ import { BPMNActivity, BPMNProcess, BPMNSequenceFlow, IdentityOptions } from '@f
 import { getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
 import { Attribute } from './attribute';
 import { Sequence } from './sequence';
+import { TaskActivity, TaskType } from '../activities';
 
 export class Activity extends Attribute {
   protected readonly key?: string;
@@ -77,13 +78,15 @@ export class Activity extends Attribute {
     this.goOut(Object.values(outgoing));
   }
 
+  protected pause(out: GoOutInterface) {
+    if (!out) return false;
+    return typeof out.pause === 'string' ? out.pause === out.activity.id || out.pause === out.activity.name : out.pause;
+  }
+
   /**
    * This function handles outgoing transitions for each token in a workflow system.
    */
   protected goOut(outgoing: GoOutInterface[]) {
-    const pause = (out: GoOutInterface) =>
-      typeof out!.pause === 'string' ? out!.pause === out!.activity.id || out!.pause === out!.activity.name : out!.pause;
-
     if (outgoing?.length && this.token) {
       if (outgoing.length === 1) {
         this.token.status = Status.Completed;
@@ -93,7 +96,7 @@ export class Activity extends Attribute {
         this.token.push(
           State.build(out!.activity!.id, {
             name: out!.activity!.name,
-            status: pause(out!) ? Status.Paused : Status.Ready,
+            status: this.pause(out!) ? Status.Paused : Status.Ready,
           }),
         );
       }
@@ -110,7 +113,7 @@ export class Activity extends Attribute {
           token.push(
             State.build(out.activity.id, {
               name: out.activity.name,
-              status: pause(out) ? Status.Paused : Status.Ready,
+              status: this.pause(out) ? Status.Paused : Status.Ready,
             }),
           );
 

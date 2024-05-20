@@ -36,37 +36,6 @@
     <bpmn2:sequenceFlow id="_0EF4CB1F-F9C8-4F50-827F-8550C601D2F7" sourceRef="_6B084EE6-53E4-4DB3-8BE9-4C502B60FD54" targetRef="Event_16a7ub0" />
     <bpmn2:sequenceFlow id="Flow_0hs4ef8" sourceRef="Gateway_009anth" targetRef="_A18B529B-55D6-4C4F-B1F8-8F7A767DDF62" />
     <bpmn2:sequenceFlow id="Flow_0eekk20" sourceRef="StartEvent_1ogvy0x" targetRef="Gateway_009anth" />
-    <bpmn2:userTask id="_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E" name="TaskB2">
-      <bpmn2:extensionElements>
-        <drools:metaData name="elementname">
-          <drools:metaValue>TaskB2</drools:metaValue>
-        </drools:metaData>
-      </bpmn2:extensionElements>
-      <bpmn2:incoming>_72F5ACFB-6B5E-4702-BD21-25C36203EADA</bpmn2:incoming>
-      <bpmn2:outgoing>_26FD838A-0FE2-40B1-8807-4D43AD2D9DBC</bpmn2:outgoing>
-      <bpmn2:ioSpecification>
-        <bpmn2:dataInput id="_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_TaskNameInputX" itemSubjectRef="__06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_TaskNameInputXItem" name="TaskName" drools:dtype="Object" />
-        <bpmn2:dataInput id="_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_SkippableInputX" itemSubjectRef="__06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_SkippableInputXItem" name="Skippable" drools:dtype="Object" />
-        <bpmn2:inputSet>
-          <bpmn2:dataInputRefs>_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_TaskNameInputX</bpmn2:dataInputRefs>
-          <bpmn2:dataInputRefs>_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_SkippableInputX</bpmn2:dataInputRefs>
-        </bpmn2:inputSet>
-      </bpmn2:ioSpecification>
-      <bpmn2:dataInputAssociation>
-        <bpmn2:targetRef>_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_TaskNameInputX</bpmn2:targetRef>
-        <bpmn2:assignment>
-          <bpmn2:from xsi:type="bpmn2:tFormalExpression">Task</bpmn2:from>
-          <bpmn2:to xsi:type="bpmn2:tFormalExpression">_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_TaskNameInputX</bpmn2:to>
-        </bpmn2:assignment>
-      </bpmn2:dataInputAssociation>
-      <bpmn2:dataInputAssociation>
-        <bpmn2:targetRef>_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_SkippableInputX</bpmn2:targetRef>
-        <bpmn2:assignment>
-          <bpmn2:from xsi:type="bpmn2:tFormalExpression">false</bpmn2:from>
-          <bpmn2:to xsi:type="bpmn2:tFormalExpression">_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_SkippableInputX</bpmn2:to>
-        </bpmn2:assignment>
-      </bpmn2:dataInputAssociation>
-    </bpmn2:userTask>
     <bpmn2:task id="_4930CE1B-2CB4-432D-A32C-E076F7A05935" name="TaskD">
       <bpmn2:extensionElements>
         <drools:metaData name="elementname">
@@ -106,37 +75,6 @@
       <bpmn2:outgoing>Flow_11o0t4f</bpmn2:outgoing>
       <bpmn2:outgoing>Flow_086nyzf</bpmn2:outgoing>
     </bpmn2:parallelGateway>
-    <bpmn2:userTask id="_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF" name="TaskB">
-      <bpmn2:extensionElements>
-        <drools:metaData name="elementname">
-          <drools:metaValue>TaskB</drools:metaValue>
-        </drools:metaData>
-      </bpmn2:extensionElements>
-      <bpmn2:incoming>Flow_0jwb2oz</bpmn2:incoming>
-      <bpmn2:outgoing>_72F5ACFB-6B5E-4702-BD21-25C36203EADA</bpmn2:outgoing>
-      <bpmn2:ioSpecification>
-        <bpmn2:dataInput id="_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_TaskNameInputX" itemSubjectRef="__4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_TaskNameInputXItem" name="TaskName" drools:dtype="Object" />
-        <bpmn2:dataInput id="_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_SkippableInputX" itemSubjectRef="__4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_SkippableInputXItem" name="Skippable" drools:dtype="Object" />
-        <bpmn2:inputSet>
-          <bpmn2:dataInputRefs>_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_TaskNameInputX</bpmn2:dataInputRefs>
-          <bpmn2:dataInputRefs>_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_SkippableInputX</bpmn2:dataInputRefs>
-        </bpmn2:inputSet>
-      </bpmn2:ioSpecification>
-      <bpmn2:dataInputAssociation>
-        <bpmn2:targetRef>_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_TaskNameInputX</bpmn2:targetRef>
-        <bpmn2:assignment>
-          <bpmn2:from xsi:type="bpmn2:tFormalExpression">Task</bpmn2:from>
-          <bpmn2:to xsi:type="bpmn2:tFormalExpression">_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_TaskNameInputX</bpmn2:to>
-        </bpmn2:assignment>
-      </bpmn2:dataInputAssociation>
-      <bpmn2:dataInputAssociation>
-        <bpmn2:targetRef>_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_SkippableInputX</bpmn2:targetRef>
-        <bpmn2:assignment>
-          <bpmn2:from xsi:type="bpmn2:tFormalExpression">false</bpmn2:from>
-          <bpmn2:to xsi:type="bpmn2:tFormalExpression">_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_SkippableInputX</bpmn2:to>
-        </bpmn2:assignment>
-      </bpmn2:dataInputAssociation>
-    </bpmn2:userTask>
     <bpmn2:task id="_A18B529B-55D6-4C4F-B1F8-8F7A767DDF62" name="TaskA">
       <bpmn2:extensionElements>
         <drools:metaData name="elementname">
@@ -175,9 +113,33 @@
     <bpmn2:sequenceFlow id="Flow_0jwb2oz" sourceRef="Gateway_009anth" targetRef="_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF" />
     <bpmn2:sequenceFlow id="Flow_11o0t4f" sourceRef="_A19F1E3E-4098-4920-AAC8-551376B0C229" targetRef="_E79168A9-57D6-4454-B4A3-0A50A31CF88D" />
     <bpmn2:sequenceFlow id="Flow_086nyzf" sourceRef="_A19F1E3E-4098-4920-AAC8-551376B0C229" targetRef="_4930CE1B-2CB4-432D-A32C-E076F7A05935" />
+    <bpmn2:task id="_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF" name="TaskB">
+      <bpmn2:incoming>Flow_0jwb2oz</bpmn2:incoming>
+      <bpmn2:outgoing>_72F5ACFB-6B5E-4702-BD21-25C36203EADA</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput name="TaskName" />
+        <bpmn2:dataInput name="Skippable" />
+        <bpmn2:inputSet />
+      </bpmn2:ioSpecification>
+    </bpmn2:task>
+    <bpmn2:userTask id="_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E" name="TaskB2">
+      <bpmn2:incoming>_72F5ACFB-6B5E-4702-BD21-25C36203EADA</bpmn2:incoming>
+      <bpmn2:outgoing>_26FD838A-0FE2-40B1-8807-4D43AD2D9DBC</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput name="TaskName" />
+        <bpmn2:dataInput name="Skippable" />
+        <bpmn2:inputSet />
+      </bpmn2:ioSpecification>
+    </bpmn2:userTask>
   </bpmn2:process>
   <bpmndi:BPMNDiagram>
     <bpmndi:BPMNPlane bpmnElement="simple_workflow_parallel">
+      <bpmndi:BPMNShape id="shape__4930CE1B-2CB4-432D-A32C-E076F7A05935" bpmnElement="_4930CE1B-2CB4-432D-A32C-E076F7A05935">
+        <dc:Bounds x="1060" y="249" width="154" height="102" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__E79168A9-57D6-4454-B4A3-0A50A31CF88D" bpmnElement="_E79168A9-57D6-4454-B4A3-0A50A31CF88D">
+        <dc:Bounds x="1060" y="89" width="154" height="102" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="shape__6B084EE6-53E4-4DB3-8BE9-4C502B60FD54" bpmnElement="_6B084EE6-53E4-4DB3-8BE9-4C502B60FD54">
         <dc:Bounds x="1321" y="186" width="56" height="56" />
         <bpmndi:BPMNLabel>
@@ -193,6 +155,12 @@
       <bpmndi:BPMNShape id="shape__A18B529B-55D6-4C4F-B1F8-8F7A767DDF62" bpmnElement="_A18B529B-55D6-4C4F-B1F8-8F7A767DDF62">
         <dc:Bounds x="393" y="89" width="154" height="102" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape_StartEvent_1ogvy0x" bpmnElement="StartEvent_1ogvy0x">
+        <dc:Bounds x="162" y="188" width="56" height="56" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="178" y="244" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="shape_Event_16a7ub0" bpmnElement="Event_16a7ub0">
         <dc:Bounds x="1437" y="186" width="56" height="56" />
       </bpmndi:BPMNShape>
@@ -202,23 +170,11 @@
           <dc:Bounds x="372" y="208" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="shape_StartEvent_1ogvy0x" bpmnElement="StartEvent_1ogvy0x">
-        <dc:Bounds x="162" y="188" width="56" height="56" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="178" y="244" width="24" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Activity_1ovkc6q_di" bpmnElement="_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF">
+        <dc:Bounds x="420" y="260" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="shape__4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF" bpmnElement="_4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF">
-        <dc:Bounds x="393" y="249" width="154" height="102" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="shape__06DB3CC6-EF1D-492D-9CA8-21641FD12D9E" bpmnElement="_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E">
-        <dc:Bounds x="611" y="249" width="154" height="102" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="shape__E79168A9-57D6-4454-B4A3-0A50A31CF88D" bpmnElement="_E79168A9-57D6-4454-B4A3-0A50A31CF88D">
-        <dc:Bounds x="1060" y="89" width="154" height="102" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="shape__4930CE1B-2CB4-432D-A32C-E076F7A05935" bpmnElement="_4930CE1B-2CB4-432D-A32C-E076F7A05935">
-        <dc:Bounds x="1060" y="249" width="154" height="102" />
+      <bpmndi:BPMNShape id="Activity_17ad668_di" bpmnElement="_06DB3CC6-EF1D-492D-9CA8-21641FD12D9E">
+        <dc:Bounds x="611" y="260" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="edge_shape__E79168A9-57D6-4454-B4A3-0A50A31CF88D_to_shape__6B084EE6-53E4-4DB3-8BE9-4C502B60FD54" bpmnElement="_D5ACDD6C-9999-49E7-9EF4-946BD62A8495">
         <di:waypoint x="1214" y="140" />
@@ -231,12 +187,12 @@
         <di:waypoint x="1349" y="242" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="edge_shape__06DB3CC6-EF1D-492D-9CA8-21641FD12D9E_to_shape__A19F1E3E-4098-4920-AAC8-551376B0C229" bpmnElement="_26FD838A-0FE2-40B1-8807-4D43AD2D9DBC">
-        <di:waypoint x="765" y="331" />
-        <di:waypoint x="925" y="331" />
+        <di:waypoint x="711" y="300" />
+        <di:waypoint x="925" y="300" />
         <di:waypoint x="925" y="242" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="edge_shape__4AE3F8EB-7AC9-4DFA-9259-BB52B128AAEF_to_shape__06DB3CC6-EF1D-492D-9CA8-21641FD12D9E" bpmnElement="_72F5ACFB-6B5E-4702-BD21-25C36203EADA">
-        <di:waypoint x="547" y="300" />
+        <di:waypoint x="520" y="300" />
         <di:waypoint x="611" y="300" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="edge_shape__A18B529B-55D6-4C4F-B1F8-8F7A767DDF62_to_shape__A19F1E3E-4098-4920-AAC8-551376B0C229" bpmnElement="_8D275BBA-4B1E-4B56-B9EC-A8AB1EB5761C">
@@ -260,7 +216,7 @@
       <bpmndi:BPMNEdge id="Flow_0jwb2oz_di" bpmnElement="Flow_0jwb2oz">
         <di:waypoint x="334" y="243" />
         <di:waypoint x="334" y="300" />
-        <di:waypoint x="393" y="300" />
+        <di:waypoint x="417" y="300" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11o0t4f_di" bpmnElement="Flow_11o0t4f">
         <di:waypoint x="953" y="214" />

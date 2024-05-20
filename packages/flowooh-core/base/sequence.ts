@@ -1,7 +1,9 @@
 import { BPMNConditionExpression, BPMNProcess, BPMNSequenceFlow } from '@flowooh/core/types';
-import { getActivity, getWrappedBPMNElement } from '@flowooh/core/utils';
+import { getActivity, getWrappedBPMNElement, logger } from '@flowooh/core/utils';
 import { Attribute } from './attribute';
 import { TemplateExecutor, template } from 'lodash';
+
+const log = logger('gateway');
 
 export class Sequence extends Attribute {
   declare $: { id: string; name?: string; sourceRef: string; targetRef: string };
@@ -36,7 +38,14 @@ export class Sequence extends Attribute {
     if (!this.conditionExpression?.expression) {
       return () => null;
     }
-    return this.conditionExpression?.expression;
+    return (data: object) => {
+      try {
+        return this.conditionExpression?.expression(data);
+      } catch (e) {
+        log.warn(`Error evaluating expression: ${e.message}`);
+        return false;
+      }
+    };
   }
 
   /**

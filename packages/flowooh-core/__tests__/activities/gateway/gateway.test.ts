@@ -3,6 +3,8 @@ import { parse, readFile } from '@flowooh/core/utils';
 import { SimpleWorkflowParallel } from './simple-workflow-parallel';
 import { SimpleWorkflowExclusiveDefault } from './simple-workflow-exclusive-default';
 import { SimpleWorkflowExclusiveCondition } from './simple-workflow-exclusive-condition';
+import { SimpleWorkflowInclusiveDefault } from './simple-workflow-inclusive-default';
+import { SimpleWorkflowInclusiveCondition } from './simple-workflow-inclusive-condition';
 
 describe('Flowooh', () => {
   it('Parallel Gateway - general', async () => {
@@ -61,5 +63,35 @@ describe('Flowooh', () => {
     expect(context.isTerminated()).toBeTruthy();
     const tokens = context.tokens;
     expect(tokens[0].history.map((h) => h.name)).toEqual(['Start', 'G1', 'TaskB', 'End']);
+  });
+
+  it('Inclusive Gateway - default', async () => {
+    const path = `${__dirname}/simple-workflow-inclusive-default.bpmn`;
+    const xml = readFile(path);
+    const workflow = Flowooh.build();
+    expect(workflow).toBeDefined();
+
+    const { context } = await workflow.execute({
+      factory: () => new SimpleWorkflowInclusiveDefault(),
+      schema: parse(xml)['bpmn:definitions'],
+    });
+    expect(context.isTerminated()).toBeTruthy();
+    const tokens = context.tokens;
+    expect(tokens[0].history.map((h) => h.name)).toEqual(['Start', 'G1', 'TaskA', 'End']);
+  });
+
+  it('Inclusive Gateway - condition', async () => {
+    const path = `${__dirname}/simple-workflow-inclusive-condition.bpmn`;
+    const xml = readFile(path);
+    const workflow = Flowooh.build();
+    expect(workflow).toBeDefined();
+
+    const { context } = await workflow.execute({
+      factory: () => new SimpleWorkflowInclusiveCondition(),
+      schema: parse(xml)['bpmn:definitions'],
+    });
+    expect(context.isTerminated()).toBeTruthy();
+    const tokens = context.tokens;
+    expect(tokens[0].history.map((h) => h.name)).toEqual(['Start', 'G1', 'TaskA', 'End']);
   });
 });

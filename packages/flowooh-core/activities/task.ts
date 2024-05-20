@@ -23,17 +23,6 @@ export class TaskActivity extends Activity {
     super(process, data, key);
   }
 
-  protected pause(out: GoOutInterface): boolean {
-    if (!out) return false;
-
-    let flag = false;
-    if (out.activity instanceof TaskActivity && out.activity.taskType === TaskType.User) {
-      flag = true;
-    }
-    const superFlag = super.pause(out);
-    return typeof superFlag === 'boolean' ? superFlag : flag;
-  }
-
   /**
    * Get all boundary events attached to this task
    */

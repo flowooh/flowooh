@@ -80,7 +80,9 @@ export class Activity extends Attribute {
 
   protected pause(out: GoOutInterface) {
     if (!out) return false;
-    return typeof out.pause === 'string' ? out.pause === out.activity.id || out.pause === out.activity.name : out.pause;
+    const flag = typeof out.pause === 'string' ? out.pause === out.activity.id || out.pause === out.activity.name : out.pause;
+    if (typeof flag === 'boolean') return flag;
+    return out.activity instanceof TaskActivity && out.activity.taskType === TaskType.User;
   }
 
   /**

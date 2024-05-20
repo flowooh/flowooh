@@ -30,8 +30,8 @@ describe('Flowooh', () => {
     const tokens2 = context2.tokens;
     expect(tokens2[2].history.map((h) => h.name)).toEqual(['TaskB', 'TaskB2', 'G2']);
     expect(tokens2[3].history.map((h) => h.name)).toEqual(['G2']);
-    expect(tokens2[4].history.map((h) => h.name)).toEqual(['TaskD', 'G3']);
-    expect(tokens2[5].history.map((h) => h.name)).toEqual(['TaskC', 'G3']);
+    expect(tokens2[4].history.map((h) => h.name)).toEqual(['TaskC', 'G3']);
+    expect(tokens2[5].history.map((h) => h.name)).toEqual(['TaskD', 'G3']);
     expect(tokens2[6].history.map((h) => h.name)).toEqual(['G3', 'End']);
   });
 

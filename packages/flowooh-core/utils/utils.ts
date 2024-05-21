@@ -61,6 +61,7 @@ export const takeOutgoing = (outgoing: Sequence[], identity?: IdentityOptions): 
 export const readFile = (path: string): string => fs.readFileSync(path, 'utf8');
 
 export const parse = (xml: string) => {
+  // replace all `bpmn\d?:` with `bpmn:`, such as bpmn2:xxx, bpmn:xxx
   xml = xml.replace(/bpmn\d?:/g, 'bpmn:');
 
   let parse;

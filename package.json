@@ -55,7 +55,8 @@
     "@types/gulp": "^4.0.17",
     "debug": "^4.3.4",
     "gulp": "^5.0.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "mime": "^4.0.3"
   },
   "publishConfig": {
     "access": "public"

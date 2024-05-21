@@ -1,5 +1,13 @@
 English | [中文](README-zh.md)
 
+# Ongoing...
+
+This repository is just getting started and is not ready for use.
+
+I plan to implement the involved elements according to the specification of BPMN, and now I am in the process of implementing the BPMN Core Structure. Then I will refactor the XML-to-object transformation so that the implementation classes conform to the BPMN specification.
+
+Here is the document I referred to: https://www.omg.org/spec/BPMN/2.0.2/PDF
+
 # Flowooh
 
 Flowooh is a light-weight extensible workflow based on Nodejs which is built with Typescript.

@@ -1,5 +1,13 @@
 [English](README.md) | 中文
 
+# 正在进行中
+
+这个仓库刚刚起步，还不能进行实际的使用。
+
+我打算依照 BPMN 的规范，将所有涉及到的 Element 进行实现，目前正在进行中的是 BPMN Core Structure 的实现。后续将对 XML 到对象的转换进行重构，使得实现类能够符合 BPMN 规范。
+
+Here is the document I referred to: https://www.omg.org/spec/BPMN/2.0.2/PDF
+
 # Flowooh
 
 Flowooh 是一个基于 Nodejs + Typescript 的轻量级可扩展工作流。

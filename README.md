@@ -8,6 +8,13 @@ I plan to implement the involved elements according to the specification of BPMN
 
 Here is the document I referred to: https://www.omg.org/spec/BPMN/2.0.2/PDF
 
+Wishlist:
+
+1. refactor BPMN element implementations
+2. build a designer for Flowooh([bpmnjs](https://github.com/bpmn-io/bpmn-js), [lowcode-engine](https://github.com/alibaba/lowcode-engine))
+3. build a approval workflow implementation demo based on Flowooh
+4. build a project management system implementation demo based on Flowooh
+
 # Flowooh
 
 Flowooh is a light-weight extensible workflow based on Nodejs which is built with Typescript.

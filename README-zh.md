@@ -8,6 +8,13 @@
 
 Here is the document I referred to: https://www.omg.org/spec/BPMN/2.0.2/PDF
 
+Wishlist:
+
+1. 重构 BPMN 组件实现
+2. 实现一个 Flowooh 的可视化编辑器([bpmnjs](https://github.com/bpmn-io/bpmn-js), [lowcode-engine](https://github.com/alibaba/lowcode-engine))
+3. 构建一个基于 Flowooh 的审批工作流实现演示
+4. 构建一个基于 Flowooh 的项目管理系统实现演示
+
 # Flowooh
 
 Flowooh 是一个基于 Nodejs + Typescript 的轻量级可扩展工作流。

@@ -1,4 +1,4 @@
-import { BPMNDiagram } from '../../bpmndi/diagram';
+import { BPMNDiagram } from '../../../bpmndi/diagram';
 import { BaseElement } from '../foundation/baseElement';
 import { Extension } from '../foundation/extensibility';
 import { Relationship } from '../foundation/relationship';

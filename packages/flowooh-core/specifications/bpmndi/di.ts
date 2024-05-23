@@ -1,7 +1,7 @@
 /**
  * BPMN DI: BPMN Diagram Interchange
  */
-import { BaseElement } from '../core/foundation/baseElement';
+import { BaseElement } from '../elements/core/foundation/baseElement';
 import { BPMNLabel, BPMNLabelStyle, BPMNPlane, BPMNShape } from './diagram';
 import { DiagramElement, Font } from './primitive';
 

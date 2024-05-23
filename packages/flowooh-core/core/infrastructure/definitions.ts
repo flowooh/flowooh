@@ -1,3 +1,4 @@
+import { BPMNDiagram } from '../../bpmndi/diagram';
 import { BaseElement } from '../foundation/baseElement';
 import { Extension } from '../foundation/extensibility';
 import { Relationship } from '../foundation/relationship';
@@ -17,8 +18,3 @@ export abstract class Definitions extends BaseElement {
   exporters: string;
   exporterVersion: string;
 }
-
-/**
- * TODO: BPMNDiagram from BPMNDI
- */
-export class BPMNDiagram {}

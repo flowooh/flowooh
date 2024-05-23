@@ -1,3 +1,4 @@
+import { Choreography } from '../../choreography/general/general';
 import { Artifact } from '../../core/commonElements/artifacts';
 import { CorrelationKey } from '../../core/commonElements/correlation';
 import { RootElement } from '../../core/foundation/rootElement';

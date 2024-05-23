@@ -1,3 +1,6 @@
+/**
+ * Status is the status of the token/context
+ */
 export enum Status {
   Ready = 'ready',
   Paused = 'paused',

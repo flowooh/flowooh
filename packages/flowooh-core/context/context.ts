@@ -8,6 +8,9 @@ export interface IContext<D = any, SV = any> {
   tokens: IToken<SV>[];
 }
 
+/**
+ * Context is the context of the process, it contains the data and the tokens
+ */
 export class Context<D = any, SV = any> implements IContext<D, SV>, Serializable<IContext, 'value' | 'data'> {
   public data?: D;
   public tokens: Token<SV>[] = [];

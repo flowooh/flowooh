@@ -1,5 +1,14 @@
 [English](README.md) | 中文
 
+<p align="center">
+<img src="https://github.com/flowooh/flowooh/blob/main/logo.png?raw=true" width="120" height="120" margin="auto">
+</p>
+<p align="center">一个基于 Nodejs + Typescript 的轻量级可扩展工作流</p>
+
+# Flowooh
+
+Flowooh 不依赖于任何服务框架，可以很容易地集成到不同的 Node 服务器应用程序中，如 Express、Koa、NestJs 等。这使得 Flowooh 非常灵活和易于使用。Flowooh 提供了丰富的功能和 api，帮助开发人员快速构建工作流引擎和工作流应用程序。此外，Flowooh 支持插件和扩展，允许开发人员根据自己的需要定制和扩展功能。
+
 # 正在进行中
 
 这个仓库刚刚起步，还不能进行实际的使用。
@@ -14,12 +23,6 @@ Wishlist:
 2. 实现一个 Flowooh 的可视化编辑器([bpmnjs](https://github.com/bpmn-io/bpmn-js), [lowcode-engine](https://github.com/alibaba/lowcode-engine))
 3. 构建一个基于 Flowooh 的审批工作流实现演示
 4. 构建一个基于 Flowooh 的项目管理系统实现演示
-
-# Flowooh
-
-Flowooh 是一个基于 Nodejs + Typescript 的轻量级可扩展工作流。
-
-Flowooh 不依赖于任何服务框架，可以很容易地集成到不同的 Node 服务器应用程序中，如 Express、Koa、NestJs 等。这使得 Flowooh 非常灵活和易于使用。Flowooh 提供了丰富的功能和 api，帮助开发人员快速构建工作流引擎和工作流应用程序。此外，Flowooh 支持插件和扩展，允许开发人员根据自己的需要定制和扩展功能。
 
 # 愿景和目标
 

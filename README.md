@@ -1,5 +1,14 @@
 English | [中文](README-zh.md)
 
+<p align="center">
+<img src="https://github.com/flowooh/flowooh/blob/main/logo.png?raw=true" width="120" height="120" margin="auto">
+</p>
+<p align="center">a light-weight extensible workflow based on Nodejs which is built with Typescript</p>
+
+# Flowooh
+
+Flowooh does not rely on any service framework and can easily be integrated into different Node server applications such as Express, Koa, NestJs, etc. This makes Flowooh very flexible and easy to use. Flowooh provides rich features and APIs to help developers quickly build workflow engines and workflow applications. Additionally, Flowooh supports plugins and extensions, allowing developers to customize and extend functionality based on their needs.
+
 # Ongoing...
 
 This repository is just getting started and is not ready for use.
@@ -14,12 +23,6 @@ Wishlist:
 2. build a designer for Flowooh([bpmnjs](https://github.com/bpmn-io/bpmn-js), [lowcode-engine](https://github.com/alibaba/lowcode-engine))
 3. build a approval workflow implementation demo based on Flowooh
 4. build a project management system implementation demo based on Flowooh
-
-# Flowooh
-
-Flowooh is a light-weight extensible workflow based on Nodejs which is built with Typescript.
-
-Flowooh does not rely on any service framework and can easily be integrated into different Node server applications such as Express, Koa, NestJs, etc. This makes Flowooh very flexible and easy to use. Flowooh provides rich features and APIs to help developers quickly build workflow engines and workflow applications. Additionally, Flowooh supports plugins and extensions, allowing developers to customize and extend functionality based on their needs.
 
 # Vision and purpose
 

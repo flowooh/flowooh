@@ -1,3 +1,6 @@
+import { FormalExpression } from './expressions';
+import { Message } from './message';
+
 /**
  * @see https://www.omg.org/spec/BPMN/2.0.2/PDF#G9.80256
  */
@@ -42,13 +45,3 @@ export abstract class CorrelationPropertyBinding {
   dataPath: FormalExpression;
   correlationPropertyRef: CorrelationProperty;
 }
-
-/**
- * TODO: FormalExpression from common
- */
-export abstract class FormalExpression {}
-
-/**
- * TODO: Message from common
- */
-export abstract class Message {}

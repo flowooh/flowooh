@@ -1,3 +1,4 @@
+import { LaneSet } from '../../process/lanes/lane';
 import { BaseElement } from '../foundation/baseElement';
 import { FlowElement } from './flowElement';
 
@@ -8,8 +9,3 @@ export abstract class FlowElementsContainer extends BaseElement {
   flowElements: FlowElement[];
   laneSets: LaneSet[];
 }
-
-/**
- * TODO: LaneSet from Process
- */
-export abstract class LaneSet {}

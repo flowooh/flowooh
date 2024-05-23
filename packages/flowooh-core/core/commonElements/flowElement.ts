@@ -1,3 +1,5 @@
+import { Auditing } from '../../process/auditing/auditing';
+import { Monitoring } from '../../process/monitoring/monitoring';
 import { BaseElement } from '../foundation/baseElement';
 import { CategoryValue } from './artifacts';
 
@@ -10,13 +12,3 @@ export abstract class FlowElement extends BaseElement {
   auditing: Auditing;
   monitoring: Monitoring;
 }
-
-/**
- * TODO: Auditing from Process
- */
-export abstract class Auditing {}
-
-/**
- * TODO: Monitoring from Process
- */
-export abstract class Monitoring {}

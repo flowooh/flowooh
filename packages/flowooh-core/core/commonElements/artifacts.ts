@@ -1,7 +1,8 @@
-import { MIMEType } from 'node:util';
 import mime from 'mime';
+import { MIMEType } from 'node:util';
 import { BaseElement } from '../foundation/baseElement';
 import { RootElement } from '../foundation/rootElement';
+import { FlowElement } from './flowElement';
 
 /**
  * @see https://www.omg.org/spec/BPMN/2.0.2/PDF#G9.89010
@@ -62,8 +63,3 @@ export enum AssociationDirection {
   One = 'one',
   Both = 'both',
 }
-
-/**
- * TODO: FlowElement
- */
-abstract class FlowElement {}

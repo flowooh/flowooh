@@ -10,6 +10,15 @@ export interface IToken<SV = any> {
   history: IState<SV>[];
 }
 
+/**
+ * Token
+ *
+ * 1. A token will traverse the Sequence Flow and pass through the elements in the Process.
+ * 2. A token is a theoretical concept that is used as an aid to define the behavior of a Process tht is being performed.
+ * 3. The behavior of Process elements can be defined by describing how they interact with tokens as it "traverses" the structure of the Process.
+ *
+ * NOTE: A token does not traverse as Message Flow since it is a Message that is passed down a Message Flow.
+ */
 export class Token<V = any> implements IToken<V>, Serializable<IToken, 'value'> {
   public readonly id = uid();
 

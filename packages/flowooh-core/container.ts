@@ -3,19 +3,22 @@ import { logger } from '@flowooh/core/utils';
 
 const log = logger('container');
 
-/* It's a container for BPMN definitions */
-export interface DefinitionContainer {
-  [id: string]: BPMNDefinition;
-}
+/**
+ * It's a container for BPMN definitions
+ * The key is the id of the BPMN definition key
+ */
+export interface DefinitionContainer extends Map<string, BPMNDefinition> {}
 
-/* It's a container for BPMN elements. */
-export interface ElementContainer {
-  [processId: string]: { [eleId: string]: WrappedElement };
-}
+/**
+ * It's a container for BPMN elements.
+ * The first key is the id of the process key
+ * The key is the id of the BPMN element key
+ */
+export interface ElementContainer extends Map<string, Map<string, WrappedElement>> {}
 
 export class Container {
-  private static elements: ElementContainer = {};
-  private static definitions: DefinitionContainer = {};
+  private static elements: ElementContainer = new Map();
+  private static definitions: DefinitionContainer = new Map();
 
   /**
    * It adds an element to the elements object, if the element has a name property, it will be added with that name
@@ -24,12 +27,14 @@ export class Container {
    * @param {WrappedElement} data - element: BPMNElement; key: string
    */
   public static addElement(processId: string, data: WrappedElement) {
-    Container.elements[processId] = Container.elements[processId] ?? {};
+    if (!Container.elements.get(processId)) {
+      Container.elements.set(processId, new Map());
+    }
 
     const $ = data.element.$;
-    Container.elements[processId][$.id] = data;
+    Container.elements.get(processId).set($.id, data);
 
-    if ($.name) Container.elements[processId][$.name] = data;
+    if ($.name) Container.elements.get(processId).set($.name, data);
 
     log.info(`Process ${processId} element ${$.id} added to the container`);
   }
@@ -45,7 +50,7 @@ export class Container {
    */
   public static getElement<T extends BPMNElement>(processId: string, identity: IdentityOptions) {
     const key = 'id' in identity ? identity.id : identity.name;
-    const value = Container.elements[processId]?.[key];
+    const value = Container.elements.get(processId)?.get(key);
 
     if (value) log.hit(`Getting process ${processId} element identity ${key}`);
     else log.miss(`Getting process ${processId} element identity ${key}`);
@@ -61,9 +66,10 @@ export class Container {
    */
   public static delElement(processId: string, identity?: IdentityOptions) {
     if (identity) {
-      if ('id' in identity) delete Container.elements[processId]?.[identity.id];
-      if ('name' in identity) delete Container.elements[processId]?.[identity.name];
+      if ('id' in identity) Container.elements.get(processId)?.delete(identity.id);
+      if ('name' in identity) Container.elements.get(processId)?.delete(identity.name);
     } else {
+      Container.elements.delete(processId);
       delete Container.elements[processId];
     }
 
@@ -78,10 +84,10 @@ export class Container {
    * @param {BPMNDefinition} definition - BPMNDefinition
    */
   public static addDefinition(id: string, definition: BPMNDefinition) {
-    if (Container.definitions[id]) {
+    if (Container.definitions.get(id)) {
       log.warn(`Definition ${id} already exists in the container, it will be overwritten.`);
     }
-    Container.definitions[id] = definition;
+    Container.definitions.set(id, definition);
 
     log.info(`Definition ${id} added to the container`);
   }
@@ -94,7 +100,7 @@ export class Container {
    * @returns The definition of the id.
    */
   public static getDefinition(id: string) {
-    return Container.definitions[id];
+    return Container.definitions.get(id);
   }
 
   /**
@@ -103,7 +109,7 @@ export class Container {
    * @param {string} id - The id of the definition.
    */
   public static delDefinition(id: string) {
-    delete Container.definitions[id];
+    Container.definitions.delete(id);
 
     log.info(`Definition ${id} deleted from the container`);
   }

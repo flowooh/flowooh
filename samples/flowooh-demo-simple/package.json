@@ -44,7 +44,6 @@
     "react-syntax-highlighter": "^15.5.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "sort-by": "^1.2.0",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {

@@ -19,6 +19,7 @@
   ],
   "scripts": {
     "test": "jest",
+    "ci": "npm install && npm run test",
     "build": "tsc -b -v packages",
     "postbuild": "npm run move:node_modules",
     "build:prod": "tsc -b -v packages",

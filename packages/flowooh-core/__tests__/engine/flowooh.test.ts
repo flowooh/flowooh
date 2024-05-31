@@ -61,7 +61,7 @@ describe('Flowooh', () => {
       node: { id: 'Activity_1r8gmbw' },
     });
 
-    expect(exec.context.isTerminated()).toBeTruthy();
+    expect(exec.context.isPaused()).toBeTruthy();
   });
 
   it('should get expected data', async () => {

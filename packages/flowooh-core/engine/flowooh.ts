@@ -1,9 +1,9 @@
 import { Activity } from '@flowooh/core/base';
 import { Container } from '@flowooh/core/container';
 import { Context, State, Status, Token } from '@flowooh/core/context';
-import { $, BPMNDefinition, BPMNProcess, IdentityOptions, Metadata, MethodOptions } from '@flowooh/core/types';
+import { $, BPMNDefinition, BPMNProcess, IdentityOptions } from '@flowooh/core/types';
 import { NodeKey, getActivity, getBPMNProcess, getWrappedBPMNElement, logger, parse, readFile } from '@flowooh/core/utils';
-import { Workflow } from './workflow';
+import { Metadata, Workflow } from './workflow';
 
 const log = logger('engine');
 
@@ -30,6 +30,14 @@ interface IExecution<D = any, SV = any> extends LoadProcessOptions<D, SV> {
   value?: SV;
   node?: IdentityOptions;
 }
+
+export type MethodOptions<D = any, V = any> = {
+  activity: Activity;
+  context: Context<D, V>;
+  token: Token<V>;
+  data?: D;
+  value?: V;
+};
 
 export class Flowooh {
   protected context?: Context;
@@ -124,7 +132,7 @@ export class Flowooh {
       throw new Error('process is not defined, buildActivity should be called after loadProcess');
     }
 
-    let activity;
+    let activity: Activity | undefined = undefined;
     if (options?.node && context.tokens.length) {
       // if node is provided and context has tokens, get the activity from the provided node
       activity = getActivity(this.process, getWrappedBPMNElement(this.process, options.node));
@@ -148,7 +156,7 @@ export class Flowooh {
     return activity;
   }
 
-  private getToken(context: Context, $: $, options: { node?: IdentityOptions; data: any; value: any }) {
+  private getToken(context: Context, $: $['$'], options: { node?: IdentityOptions; data: any; value: any }) {
     if (!this.process) {
       throw new Error('process is not defined, buildActivity should be called after loadProcess');
     }

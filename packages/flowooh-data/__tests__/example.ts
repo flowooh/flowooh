@@ -1,6 +1,6 @@
 import { Act, Context, Ctx, Data, EventActivity, Node, Param, Process, Sign, TaskActivity, Token, Value, Workflow } from '@flowooh/core';
 
-@Process({ id: 'Process_1igpwhg' })
+@Process({ definitionId: 'test-flowooh-data', id: 'Process_1igpwhg' })
 export class SimpleWorkflow extends Workflow {
   @Node({ id: 'StartEvent_1ogvy0x' })
   public start(@Act() activity: EventActivity, @Ctx() context: Context, @Data() data: any, @Value() value: any) {

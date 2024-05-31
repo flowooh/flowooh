@@ -3,7 +3,7 @@ import { Context, Token } from '@flowooh/core/context';
 import { Act, Ctx, Data, Node, Param, Process, Sign, Value } from '@flowooh/core/decorators';
 import { Workflow } from '@flowooh/core/engine';
 
-@Process({ id: 'Process_1igpwhg' })
+@Process({ definitionId: 'test-flowooh-core-engine', id: 'Process_1igpwhg' })
 export class SimpleWorkflow extends Workflow {
   @Node({ id: 'StartEvent_1ogvy0x' })
   public start(@Act() activity: EventActivity, @Ctx() context: Context, @Data() data: any, @Value() value: any) {

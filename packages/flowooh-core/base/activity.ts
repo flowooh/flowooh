@@ -1,9 +1,9 @@
+import { TaskActivity } from '@flowooh/core/activities';
 import { Context, State, Status, Token } from '@flowooh/core/context';
-import { BPMNActivity, BPMNProcess, BPMNSequenceFlow, IdentityOptions } from '@flowooh/core/types';
+import { BPMNActivity, BPMNProcess, BPMNSequenceFlow, IdentityOptions, TaskType } from '@flowooh/core/types';
 import { getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
 import { Attribute } from './attribute';
 import { Sequence } from './sequence';
-import { TaskActivity, TaskType } from '../activities';
 
 export class Activity extends Attribute {
   protected readonly key?: string;
@@ -26,8 +26,8 @@ export class Activity extends Attribute {
   get incoming(): Sequence[] {
     const flows = this['bpmn:incoming']
       ?.map((id: string) => {
-        const flow = getWrappedBPMNElement(this.process, { id })?.element;
-        if (flow) return Sequence.build(this.process, flow as BPMNSequenceFlow);
+        const flow = getWrappedBPMNElement<BPMNSequenceFlow>(this.process, { id })?.element;
+        if (flow) return Sequence.build(this.process, flow);
       })
       .filter((f) => f instanceof Sequence) as Sequence[];
     return flows;
@@ -39,8 +39,8 @@ export class Activity extends Attribute {
   get outgoing(): Sequence[] {
     return this['bpmn:outgoing']
       ?.map((id: string) => {
-        const flow = getWrappedBPMNElement(this.process, { id })?.element;
-        if (flow) return Sequence.build(this.process, flow as BPMNSequenceFlow);
+        const flow = getWrappedBPMNElement<BPMNSequenceFlow>(this.process, { id })?.element;
+        if (flow) return Sequence.build(this.process, flow);
       })
       .filter((f) => f instanceof Sequence) as Sequence[];
   }

@@ -1,5 +1,5 @@
 import { Activity } from '@flowooh/core/base';
-import { BPMNEvent, BPMNProcess } from '@flowooh/core/types';
+import { $, BPMNEvent, BPMNProcess } from '@flowooh/core/types';
 import { getActivity, getWrappedBPMNElement } from '@flowooh/core/utils';
 import { TaskActivity } from './task';
 
@@ -27,11 +27,7 @@ enum EventDefinitionType {
 }
 
 export class EventActivity extends Activity {
-  declare $: {
-    id: string;
-    name?: string;
-    attachedToRef?: string;
-  };
+  declare $: $<{ attachedToRef?: string }>['$'];
 
   constructor(process: BPMNProcess, data?: Partial<EventActivity>, key?: string) {
     if (data?.attachedToRef && data.type !== EventType.Boundary) {

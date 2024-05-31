@@ -1,4 +1,4 @@
-import { Metadata } from '@flowooh/core/types';
+import { IdentityOptions } from '@flowooh/core/types';
 
 /**
  * any workflow class must extend this class
@@ -6,3 +6,8 @@ import { Metadata } from '@flowooh/core/types';
 export abstract class Workflow {
   readonly $__metadata__?: Metadata;
 }
+
+export type Metadata = {
+  process: IdentityOptions;
+  definition: { id: string };
+};

@@ -1,23 +1,10 @@
-import { Activity, GoOutInterface } from '@flowooh/core/base';
-import { BPMNProcess, BPMNTask } from '@flowooh/core/types';
+import { Activity } from '@flowooh/core/base';
+import { $, BPMNBoundaryEvent, BPMNProcess, BPMNTask, TaskType } from '@flowooh/core/types';
 import { getActivity, getWrappedBPMNElement } from '@flowooh/core/utils';
 import { EventActivity } from './event';
 
-export enum TaskType {
-  Send = 'send',
-  User = 'user',
-  Manual = 'manual',
-  Script = 'script',
-  Receive = 'receive',
-  Service = 'service',
-  Business = 'business',
-}
-
 export class TaskActivity extends Activity {
-  declare $: {
-    id: string;
-    name?: string;
-  };
+  declare $: $['$'];
 
   constructor(process: BPMNProcess, data?: Partial<TaskActivity>, key?: string) {
     super(process, data, key);
@@ -29,7 +16,7 @@ export class TaskActivity extends Activity {
   get attachments(): EventActivity[] {
     const boundaries = (this.process['bpmn:boundaryEvent'] ?? [])
       .filter((e) => e.$.attachedToRef === this.$.id)
-      .map((e) => getWrappedBPMNElement(this.process, e.$));
+      .map((e) => getWrappedBPMNElement<BPMNBoundaryEvent>(this.process, e.$));
 
     return boundaries.filter((e) => !!e).map((e) => getActivity(this.process, e) as EventActivity);
   }

@@ -1,6 +1,6 @@
 import { Activity, GoOutInterface, Sequence } from '@flowooh/core/base';
 import { Status, Token } from '@flowooh/core/context';
-import { BPMNGateway, BPMNProcess, BPMNSequenceFlow, IdentityOptions } from '@flowooh/core/types';
+import { $, BPMNGateway, BPMNProcess, BPMNSequenceFlow, IdentityOptions } from '@flowooh/core/types';
 import { getWrappedBPMNElement, logger, takeOutgoing } from '@flowooh/core/utils';
 
 const log = logger('gateway');
@@ -19,7 +19,7 @@ export enum GatewayType {
 }
 
 export class GatewayActivity extends Activity {
-  declare $: { id: string; name?: string; default?: string };
+  declare $: $<{ default?: string }>['$'];
 
   constructor(process: BPMNProcess, data?: Partial<GatewayActivity>, key?: string) {
     super(process, data, key);
@@ -127,9 +127,21 @@ export class GatewayActivity extends Activity {
   }
 
   get default(): Sequence | undefined {
+    if (this.type === GatewayType.Parallel) return;
+    if (this.type === GatewayType.EventBased) return;
+    if (this.type === GatewayType.Complex) return;
+
     if (!this.$.default) return;
-    const flow = getWrappedBPMNElement(this.process, { id: this.$.default })?.element;
-    if (flow) return Sequence.build(this.process, flow as BPMNSequenceFlow);
+    const flow = getWrappedBPMNElement<BPMNSequenceFlow>(this.process, { id: this.$.default })?.element;
+    if (!flow) {
+      log.error(`Default sequence flow ${this.$.default} of gateway ${this.id} not found.`);
+      return;
+    }
+    const sequence = Sequence.build(this.process, flow);
+    if (sequence.conditionExpression) {
+      log.warn(`Default sequence flow ${sequence.id} of gateway ${this.id} has a condition expression, which is not allowed.`);
+    }
+    return sequence;
   }
 
   get type() {

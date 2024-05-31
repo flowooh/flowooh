@@ -1,7 +1,17 @@
-import { BPMNDefinition, DefinitionContainer, ElementContainer, IdentityOptions, WrappedElement } from '@flowooh/core/types';
+import { BPMNDefinition, BPMNElement, IdentityOptions, WrappedElement } from '@flowooh/core/types';
 import { logger } from '@flowooh/core/utils';
 
 const log = logger('container');
+
+/* It's a container for BPMN definitions */
+export interface DefinitionContainer {
+  [id: string]: BPMNDefinition;
+}
+
+/* It's a container for BPMN elements. */
+export interface ElementContainer {
+  [processId: string]: { [eleId: string]: WrappedElement };
+}
 
 export class Container {
   private static elements: ElementContainer = {};
@@ -33,14 +43,14 @@ export class Container {
    *
    * @returns The element of the user with the given identity.
    */
-  public static getElement(processId: string, identity: IdentityOptions) {
+  public static getElement<T extends BPMNElement>(processId: string, identity: IdentityOptions) {
     const key = 'id' in identity ? identity.id : identity.name;
     const value = Container.elements[processId]?.[key];
 
     if (value) log.hit(`Getting process ${processId} element identity ${key}`);
     else log.miss(`Getting process ${processId} element identity ${key}`);
 
-    return value;
+    return value as WrappedElement<T>;
   }
 
   /**
@@ -68,6 +78,9 @@ export class Container {
    * @param {BPMNDefinition} definition - BPMNDefinition
    */
   public static addDefinition(id: string, definition: BPMNDefinition) {
+    if (Container.definitions[id]) {
+      log.warn(`Definition ${id} already exists in the container, it will be overwritten.`);
+    }
     Container.definitions[id] = definition;
 
     log.info(`Definition ${id} added to the container`);

@@ -1,4 +1,5 @@
-import { IdentityOptions, MethodOptions } from '@flowooh/core/types';
+import { MethodOptions } from '@flowooh/core/engine';
+import { IdentityOptions } from '@flowooh/core/types';
 import { NodeKey, ParamKey } from '@flowooh/core/utils';
 import { ParamType } from './params';
 

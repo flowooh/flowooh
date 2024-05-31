@@ -1,11 +1,11 @@
 import { EventActivity, GatewayActivity, TaskActivity } from '@flowooh/core/activities';
 import { Activity, Sequence } from '@flowooh/core/base';
 import { Container } from '@flowooh/core/container';
-import { BPMNDefinition, BPMNEvent, BPMNGateway, BPMNProcess, BPMNTask, IdentityOptions, WrappedElement } from '@flowooh/core/types';
+import { BPMNDefinition, BPMNElement, BPMNEvent, BPMNGateway, BPMNProcess, BPMNTask, IdentityOptions, WrappedElement } from '@flowooh/core/types';
 import * as fs from 'fs';
 import { parseString } from 'xml2js';
 
-export const getActivity = (process: BPMNProcess, data?: WrappedElement): Activity => {
+export const getActivity = (process: BPMNProcess, data?: WrappedElement) => {
   if (!data) return new Activity(process);
 
   const { key, element } = data;
@@ -23,20 +23,18 @@ export const getActivity = (process: BPMNProcess, data?: WrappedElement): Activi
   return new Activity(process, element, key);
 };
 
-export const getWrappedBPMNElement = (process: BPMNProcess, identity: IdentityOptions) => {
-  const wrappedElement = Container.getElement(process.$.id, identity);
+export const getWrappedBPMNElement = <T extends BPMNElement>(process: BPMNProcess, identity: IdentityOptions) => {
+  const wrappedElement = Container.getElement<T>(process.$.id, identity);
+  if (wrappedElement) return wrappedElement;
 
-  if (typeof wrappedElement !== 'object') {
-    for (const [key, elements] of Object.entries(process)) {
-      if (typeof elements === 'object' && Array.isArray(elements)) {
-        for (const element of elements) {
-          if (!Container.getElement(process.$.id, element.$)) Container.addElement(process.$.id, { key, element });
-          if ('id' in identity && element.$.id === identity.id) return { key, element };
-          if ('name' in identity && element.$.name === identity.name) return { key, element };
-        }
+  for (const [key, elements] of Object.entries(process)) {
+    if (typeof elements === 'object' && Array.isArray(elements)) {
+      for (const element of elements) {
+        if (!Container.getElement(process.$.id, element.$)) Container.addElement(process.$.id, { key, element });
       }
     }
-  } else return wrappedElement;
+  }
+  return Container.getElement<T>(process.$.id, identity);
 };
 
 export const getBPMNProcess = (definition: BPMNDefinition, identity: IdentityOptions) => {

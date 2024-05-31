@@ -1,9 +1,10 @@
-import { BPMNProcess } from '@flowooh/core/types';
+import { $, BPMNProcess } from '@flowooh/core/types';
+import { Association } from '../specifications/elements/core/commonElements/artifacts';
 
-export class Attribute {
+export class Attribute<Attrs = {}, Associations = {}> {
   protected process: BPMNProcess;
 
-  $!: { id: string; name?: string };
+  $!: $<Attrs>['$'];
 
   constructor(process: BPMNProcess, data?: Partial<Attribute>) {
     if (data) Object.assign(this, data);

@@ -224,7 +224,6 @@ describe('FlowoohRtExecutionService', () => {
       const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
       const tokens = result.execution.context.tokens.filter((t) => t.isPaused());
       const result2 = await service.rt.execution.execute(executionRecordId(result.processInstanceId, tokens[0].id), { workflow: SimpleWorkflow });
-      console.log('🚀 ~ it ~ context:', JSON.stringify(result2.execution.context));
       expect(result2.execution.context.status).toEqual(Status.Paused);
     });
 

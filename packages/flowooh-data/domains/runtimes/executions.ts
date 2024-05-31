@@ -61,7 +61,7 @@ export default class FlowoohRtExecutionService extends BaseService {
     });
 
     const executionRecordIds = await this.save(originExecution.proc_definition_id, originExecution.proc_instance_id, execution.context);
-    return { execution, executionRecordIds };
+    return { execution, processInstanceId: originExecution.proc_instance_id, executionRecordIds };
   }
 
   async save(processDefId: string, processInstId: string, context: Context) {

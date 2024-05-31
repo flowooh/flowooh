@@ -224,6 +224,7 @@ describe('FlowoohRtExecutionService', () => {
       const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
       const tokens = result.execution.context.tokens.filter((t) => t.isPaused());
       const result2 = await service.rt.execution.execute(executionRecordId(result.processInstanceId, tokens[0].id), { workflow: SimpleWorkflow });
+      console.log('🚀 ~ it ~ context:', JSON.stringify(result2.execution.context));
       expect(result2.execution.context.status).toEqual(Status.Paused);
     });
 
@@ -231,7 +232,15 @@ describe('FlowoohRtExecutionService', () => {
       const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
       const tokens = result.execution.context.tokens.filter((t) => t.isPaused());
       const result2 = await service.rt.execution.execute(executionRecordId(result.processInstanceId, tokens[1].id), { workflow: SimpleWorkflow });
-      expect(result2.execution.context.status).toEqual(Status.Terminated);
+      expect(result2.execution.context.status).toEqual(Status.Paused);
+    });
+
+    it('should execute task1 and task02 in the flowooh', async () => {
+      const result = await service.rt.execution.start('1', { workflow: SimpleWorkflow });
+      const tokens = result.execution.context.tokens.filter((t) => t.isPaused());
+      const result2 = await service.rt.execution.execute(executionRecordId(result.processInstanceId, tokens[0].id), { workflow: SimpleWorkflow });
+      const result3 = await service.rt.execution.execute(executionRecordId(result.processInstanceId, tokens[1].id), { workflow: SimpleWorkflow });
+      expect(result3.execution.context.status).toEqual(Status.Terminated);
     });
   });
 });

@@ -30,11 +30,12 @@ export class Container {
     if (!Container.elements.get(processId)) {
       Container.elements.set(processId, new Map());
     }
+    const process = Container.elements.get(processId)!;
 
     const $ = data.element.$;
-    Container.elements.get(processId).set($.id, data);
+    process.set($.id, data);
 
-    if ($.name) Container.elements.get(processId).set($.name, data);
+    if ($.name) process.set($.name, data);
 
     log.info(`Process ${processId} element ${$.id} added to the container`);
   }

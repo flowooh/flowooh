@@ -2,6 +2,7 @@ import { BaseElement } from '../../core/foundation/baseElement';
 import { RootElement } from '../../core/foundation/rootElement';
 import { EndPoint } from '../../core/services/endPoint';
 import { Interface } from '../../core/services/interface';
+import { Process } from '../../process/general/general';
 import { InteractionNode } from '../messageFlow/interactionNode';
 
 /**

@@ -1,7 +1,8 @@
 import { Activity } from '@flowooh/core/base';
-import { $, BPMNBoundaryEvent, BPMNProcess, BPMNTask, TaskType } from '@flowooh/core/types';
-import { getActivity, getWrappedBPMNElement } from '@flowooh/core/utils';
+import { $, BPMNBoundaryEvent, BPMNProcess, BPMNTask, IdentityOptions, TaskType } from '@flowooh/core/types';
+import { getActivity, getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
 import { EventActivity } from './event';
+import { ResourceRole } from '../base/resourceRole';
 
 export class TaskActivity extends Activity {
   declare $: $['$'];
@@ -24,7 +25,8 @@ export class TaskActivity extends Activity {
 
   get potentialOwners() {
     const potentialOwners = this.$$?.['bpmn:potentialOwner'];
-    if (!potentialOwners) return [];
+    const resourceRoles = potentialOwners?.map((el) => ResourceRole.build(this.process, el)) || [];
+    return resourceRoles.map((role) => role.execute());
   }
 
   get taskType() {

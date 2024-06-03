@@ -7,14 +7,10 @@ import {
   BPMNResourceParameterBinding,
   BPMNResourceRole,
 } from '../types';
-import { logger } from '../utils';
+import { getExpression, logger } from '../utils';
 import { Attribute } from './attribute';
 
 const log = logger('resourceRole');
-
-function getExecutorByName(name: string) {
-  return (...p: any) => {};
-}
 
 /**
  * @see https://www.omg.org/spec/BPMN/2.0.2/PDF#G9.81887
@@ -29,8 +25,8 @@ export class Resource extends Attribute {
   }
 
   get resourceParameters() {
-    const eleList = this.$$['bpmn:resourceParameters'];
-    return eleList.map((el) => ResourceParameter.build(this.process, el));
+    const eleList = this.$$?.['bpmn:resourceParameters'];
+    return eleList?.map((el) => ResourceParameter.build(this.process, el)) || [];
   }
 
   static build(process: BPMNProcess, el: BPMNResource) {
@@ -67,12 +63,14 @@ export class ResourceRole extends Attribute {
   get resource() {
     const resourceRef = this.$$['bpmn:resourceRef']?.[0];
     if (!resourceRef) return;
-    const resource = this.process.$$['bpmn:resource'].find((r) => r.$.id === resourceRef);
+    const resource = this.process.$$?.['bpmn:resource']?.find((r) => r.$.id === resourceRef);
+    if (!resource) return;
     return Resource.build(this.process, resource);
   }
 
   get parameters() {
-    return this.$$['bpmn:resourceParameterBinding'].map((p) => ResourceParameterBinding.build(this.process, this.resource, p));
+    if (!this.resource) return [];
+    return this.$$['bpmn:resourceParameterBinding'].map((p) => ResourceParameterBinding.build(this.process, this.resource!, p));
   }
 
   get resourceAssignmentExpression() {
@@ -87,11 +85,13 @@ export class ResourceRole extends Attribute {
     }
     if (this.resource) {
       const params = this.resource.resourceParameters.map((p) => {
-        const binding = this.parameters.find((b) => b.parameter.id === p.id);
-        return { [p.name]: binding?.value };
+        const binding = this.parameters.find((b) => b.parameter?.id === p.id);
+        return { [p.name as string]: binding?.value };
       });
-      const resourceExecutor = getExecutorByName(this.resource.name);
-      return resourceExecutor(params);
+      if (this.resource.name) {
+        const resourceExecutor = getExpression(this.process, this.resource.name);
+        return resourceExecutor?.(params);
+      }
     }
   }
 
@@ -138,9 +138,9 @@ export class ResourceAssignmentExpression extends Attribute {
     return this.$$['bpmn:formalExpression'];
   }
 
-  get expression(): TemplateExecutor {
+  get expression() {
     try {
-      return template(this.expressionString);
+      return getExpression(this.process, this.expressionString);
     } catch (e) {
       throw new Error(`Error parsing expression: ${this.expressionString}`);
     }

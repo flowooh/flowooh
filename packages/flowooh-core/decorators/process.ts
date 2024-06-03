@@ -15,10 +15,14 @@ export type ProcessOptions = { schema: BPMNDefinition } | { xml: string } | { pa
  * identityOptions is used to identify the process in the BPMN process.
  * a bpmn definition may have more than one process, so the identityOptions is required.
  */
-export function Process(options: Partial<ProcessOptions & IdentityOptions> & { definitionId: string }): Workflow['constructor'] {
+export function Process(
+  options: Partial<ProcessOptions & IdentityOptions> & { definitionId: string; expressions?: Record<string, Function> },
+): Workflow['constructor'] {
   if ('schema' in options) Container.addDefinition(options.definitionId, options.schema!);
   if ('xml' in options) Container.addDefinition(options.definitionId, parse(options.xml!)['bpmn:definitions']);
   if ('path' in options) Container.addDefinition(options.definitionId, parse(readFile(options.path!))['bpmn:definitions']);
+
+  if (options.expressions) Container.addExpressions(options.definitionId, options.expressions!);
 
   return function <T extends { new (...args: any[]): {} }>(constructor: T) {
     return class extends constructor {

@@ -16,9 +16,17 @@ export interface DefinitionContainer extends Map<string, BPMNDefinition> {}
  */
 export interface ElementContainer extends Map<string, Map<string, WrappedElement>> {}
 
+/**
+ * It's a container for expressions
+ * The first key is the id of the process key
+ * The key is the id of expression key
+ */
+export interface ExpressionContainer extends Map<string, Map<string, Function>> {}
+
 export class Container {
   private static elements: ElementContainer = new Map();
   private static definitions: DefinitionContainer = new Map();
+  private static expressions: ExpressionContainer = new Map();
 
   /**
    * It adds an element to the elements object, if the element has a name property, it will be added with that name
@@ -113,5 +121,32 @@ export class Container {
     Container.definitions.delete(id);
 
     log.info(`Definition ${id} deleted from the container`);
+  }
+
+  public static addExpression(processId: string, key: string, expression: Function) {
+    if (!Container.expressions.get(processId)) {
+      Container.expressions.set(processId, new Map());
+    }
+    const process = Container.expressions.get(processId)!;
+    if (process.get(key)) {
+      log.warn(`Expression ${key} already exists in the container, it will be overwritten.`);
+    }
+    process.set(key, expression);
+    log.info(`Expression ${key} added to the container`);
+  }
+
+  public static addExpressions(processId: string, expressions: Record<string, Function>) {
+    Object.entries(expressions).forEach(([key, expression]) => {
+      Container.addExpression(processId, key, expression);
+    });
+  }
+
+  public static getExpression(processId: string, key: string) {
+    return Container.expressions.get(processId)?.get(key);
+  }
+
+  public static delExpression(processId: string, key: string) {
+    Container.expressions.get(processId)?.delete(key);
+    log.info(`Expression ${key} deleted from the container`);
   }
 }

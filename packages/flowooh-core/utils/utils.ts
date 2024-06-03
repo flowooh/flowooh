@@ -23,6 +23,10 @@ export const getActivity = (process: BPMNProcess, data?: WrappedElement) => {
   return new Activity(process, element as Activity, key);
 };
 
+export const getExpression = (process: BPMNProcess, expressionKey: string) => {
+  return Container.getExpression(process.$.id, expressionKey);
+};
+
 export const getWrappedBPMNElement = <T extends BPMNElement>(process: BPMNProcess, identity: IdentityOptions) => {
   const wrappedElement = Container.getElement<T>(process.$.id, identity);
   if (wrappedElement) return wrappedElement;

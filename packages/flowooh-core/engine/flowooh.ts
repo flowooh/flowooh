@@ -141,10 +141,13 @@ export class Flowooh {
       }
     } else if (!options?.node && !context.tokens.length) {
       // if node is not provided and context has no tokens, should get the start event activity
-      if (this.process['bpmn:startEvent']?.length !== 1) {
-        throw new Error('Start event is not defined in process or have more than one start event');
+      if (!this.process.$$['bpmn:startEvent']?.length) {
+        throw new Error('Start event is not defined in process');
       }
-      activity = getActivity(this.process, { key: 'bpmn:startEvent', element: this.process['bpmn:startEvent'][0] });
+      if (this.process.$$['bpmn:startEvent']?.length !== 1) {
+        throw new Error('Start event is defined more than one time in process');
+      }
+      activity = getActivity(this.process, { key: 'bpmn:startEvent', element: this.process.$$['bpmn:startEvent'][0] });
       if (!activity) throw new Error('Start event activity not found');
     }
     if (!activity && options?.node && !context.tokens.length) {
@@ -168,7 +171,7 @@ export class Flowooh {
       if (!token?.isReady()) throw new Error('Token is not ready to consume');
     } else if (!options?.node && !context.tokens.length) {
       // if node is not provided and context has no tokens, should get the start event activity
-      if (this.process['bpmn:startEvent']?.length !== 1) {
+      if (this.process.$$['bpmn:startEvent']?.length !== 1) {
         throw new Error('Start event is not defined in process or have more than one start event');
       }
       const state = State.build($.id, { name: $.name, value: options.value });

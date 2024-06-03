@@ -270,7 +270,7 @@ describe('FlowoohRepoDefinitionRepository', () => {
 
       // Assert
       expect(result).toEqual(expect.any(Object));
-      expect(result).toHaveProperty('bpmn:process');
+      expect(result?.$$).toHaveProperty('bpmn:process');
     });
 
     it('should return undefined if the definition does not exist', async () => {

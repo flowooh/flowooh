@@ -29,6 +29,8 @@ enum EventDefinitionType {
 export class EventActivity extends Activity {
   declare $: $<{ attachedToRef?: string }>['$'];
 
+  declare $$: BPMNEvent['$$'];
+
   constructor(process: BPMNProcess, data?: Partial<EventActivity>, key?: string) {
     if (data?.attachedToRef && data.type !== EventType.Boundary) {
       throw new Error('attachedToRef should only be set for boundary events');
@@ -58,14 +60,14 @@ export class EventActivity extends Activity {
   }
 
   get eventDefinitionType(): EventDefinitionType | undefined {
-    if ('bpmn:linkEventDefinition' in this) return EventDefinitionType.Link;
-    else if ('bpmn:timerEventDefinition' in this) return EventDefinitionType.Timer;
-    else if ('bpmn:errorEventDefinition' in this) return EventDefinitionType.Error;
-    else if ('bpmn:signalEventDefinition' in this) return EventDefinitionType.Signal;
-    else if ('bpmn:messageEventDefinition' in this) return EventDefinitionType.Message;
-    else if ('bpmn:escalationEventDefinition' in this) return EventDefinitionType.Escalation;
-    else if ('bpmn:conditionalEventDefinition' in this) return EventDefinitionType.Conditional;
-    else if ('bpmn:compensationEventDefinition' in this) return EventDefinitionType.Compensation;
+    if ('bpmn:linkEventDefinition' in this.$$) return EventDefinitionType.Link;
+    else if ('bpmn:timerEventDefinition' in this.$$) return EventDefinitionType.Timer;
+    else if ('bpmn:errorEventDefinition' in this.$$) return EventDefinitionType.Error;
+    else if ('bpmn:signalEventDefinition' in this.$$) return EventDefinitionType.Signal;
+    else if ('bpmn:messageEventDefinition' in this.$$) return EventDefinitionType.Message;
+    else if ('bpmn:escalationEventDefinition' in this.$$) return EventDefinitionType.Escalation;
+    else if ('bpmn:conditionalEventDefinition' in this.$$) return EventDefinitionType.Conditional;
+    else if ('bpmn:compensationEventDefinition' in this.$$) return EventDefinitionType.Compensation;
   }
 
   static build(el: BPMNEvent, process: BPMNProcess, key?: string) {

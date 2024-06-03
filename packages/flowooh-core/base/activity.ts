@@ -1,6 +1,6 @@
 import { TaskActivity } from '@flowooh/core/activities';
 import { Context, State, Status, Token } from '@flowooh/core/context';
-import { BPMNActivity, BPMNProcess, BPMNSequenceFlow, IdentityOptions, TaskType } from '@flowooh/core/types';
+import { $$, BPMNActivity, BPMNProcess, BPMNSequenceFlow, IdentityOptions, TaskType } from '@flowooh/core/types';
 import { getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
 import { Attribute } from './attribute';
 import { Sequence } from './sequence';
@@ -11,8 +11,7 @@ export class Activity extends Attribute {
   public token?: Token;
   public context?: Context;
 
-  private readonly 'bpmn:incoming': string[];
-  private readonly 'bpmn:outgoing': string[];
+  declare readonly $$: BPMNActivity['$$'];
 
   constructor(process: BPMNProcess, data?: Partial<Activity>, key?: string) {
     super(process, data);
@@ -24,7 +23,7 @@ export class Activity extends Attribute {
    * returns an array of ${@link Sequence} object that INCOME to the current activity
    */
   get incoming(): Sequence[] {
-    const flows = this['bpmn:incoming']
+    const flows = this.$$['bpmn:incoming']
       ?.map((id: string) => {
         const flow = getWrappedBPMNElement<BPMNSequenceFlow>(this.process, { id })?.element;
         if (flow) return Sequence.build(this.process, flow);
@@ -37,7 +36,7 @@ export class Activity extends Attribute {
    * returns an array of ${@link Sequence} object that OUTCOME from the current activity
    */
   get outgoing(): Sequence[] {
-    return this['bpmn:outgoing']
+    return this.$$['bpmn:outgoing']
       ?.map((id: string) => {
         const flow = getWrappedBPMNElement<BPMNSequenceFlow>(this.process, { id })?.element;
         if (flow) return Sequence.build(this.process, flow);

@@ -5,6 +5,7 @@ import { EventActivity } from './event';
 
 export class TaskActivity extends Activity {
   declare $: $['$'];
+  declare $$: BPMNTask['$$'];
 
   constructor(process: BPMNProcess, data?: Partial<TaskActivity>, key?: string) {
     super(process, data, key);
@@ -14,11 +15,16 @@ export class TaskActivity extends Activity {
    * Get all boundary events attached to this task
    */
   get attachments(): EventActivity[] {
-    const boundaries = (this.process['bpmn:boundaryEvent'] ?? [])
+    const boundaries = (this.process.$$['bpmn:boundaryEvent'] ?? [])
       .filter((e) => e.$.attachedToRef === this.$.id)
       .map((e) => getWrappedBPMNElement<BPMNBoundaryEvent>(this.process, e.$));
 
     return boundaries.filter((e) => !!e).map((e) => getActivity(this.process, e) as EventActivity);
+  }
+
+  get potentialOwners() {
+    const potentialOwners = this.$$?.['bpmn:potentialOwner'];
+    if (!potentialOwners) return [];
   }
 
   get taskType() {

@@ -1,4 +1,4 @@
-import { $, BPMNProcess } from '@flowooh/core/types';
+import { $, $$, BPMNProcess } from '@flowooh/core/types';
 import { Association } from '../specifications/elements/core/commonElements/artifacts';
 
 export class Attribute<Attrs = {}, Associations = {}> {

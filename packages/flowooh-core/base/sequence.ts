@@ -8,7 +8,7 @@ const log = logger('gateway');
 export class Sequence extends Attribute {
   declare $: $<{ sourceRef: string; targetRef: string }>['$'];
 
-  private readonly 'bpmn:conditionExpression': BPMNConditionExpression[] | undefined;
+  private declare readonly $$: BPMNSequenceFlow['$$'];
 
   constructor(process: BPMNProcess, data?: Partial<Sequence>) {
     super(process, data);
@@ -28,7 +28,7 @@ export class Sequence extends Attribute {
   }
 
   get conditionExpression() {
-    return this['bpmn:conditionExpression']?.[0] ? ConditionExpression.build(this.process, this['bpmn:conditionExpression'][0]) : undefined;
+    return this.$$?.['bpmn:conditionExpression']?.[0] ? ConditionExpression.build(this.process, this.$$['bpmn:conditionExpression'][0]) : undefined;
   }
 
   get condition() {

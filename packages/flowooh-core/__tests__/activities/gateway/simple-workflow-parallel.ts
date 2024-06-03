@@ -1,3 +1,4 @@
+import { TaskActivity } from '@flowooh/core/activities';
 import { EventActivity } from '@flowooh/core/activities/event';
 import { Context } from '@flowooh/core/context';
 import { Act, Ctx, Data, Node, Process, Value } from '@flowooh/core/decorators';
@@ -11,7 +12,7 @@ export class SimpleWorkflowParallel extends Workflow {
   }
 
   @Node({ name: 'TaskB2' })
-  public taskB2(@Act() activity: EventActivity, @Ctx() context: Context, @Data() data: any, @Value() value: any) {
+  public taskB2(@Act() activity: TaskActivity, @Ctx() context: Context, @Data() data: any, @Value() value: any) {
     activity.takeOutgoing();
   }
 }

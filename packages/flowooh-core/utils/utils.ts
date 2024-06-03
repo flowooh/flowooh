@@ -20,14 +20,14 @@ export const getActivity = (process: BPMNProcess, data?: WrappedElement) => {
     return GatewayActivity.build(element as BPMNGateway, process, key);
   }
 
-  return new Activity(process, element, key);
+  return new Activity(process, element as Activity, key);
 };
 
 export const getWrappedBPMNElement = <T extends BPMNElement>(process: BPMNProcess, identity: IdentityOptions) => {
   const wrappedElement = Container.getElement<T>(process.$.id, identity);
   if (wrappedElement) return wrappedElement;
 
-  for (const [key, elements] of Object.entries(process)) {
+  for (const [key, elements] of Object.entries(process.$$)) {
     if (typeof elements === 'object' && Array.isArray(elements)) {
       for (const element of elements) {
         if (!Container.getElement(process.$.id, element.$)) Container.addElement(process.$.id, { key, element });
@@ -38,7 +38,7 @@ export const getWrappedBPMNElement = <T extends BPMNElement>(process: BPMNProces
 };
 
 export const getBPMNProcess = (definition: BPMNDefinition, identity: IdentityOptions) => {
-  const processes = definition['bpmn:process'];
+  const processes = definition.$$['bpmn:process'];
 
   if ('id' in identity) return processes.find((process) => process.$.id === identity.id);
   return processes.find((process) => process.$.name === identity.name);
@@ -63,7 +63,7 @@ export const parse = (xml: string) => {
   xml = xml.replace(/bpmn\d?:/g, 'bpmn:');
 
   let parse;
-  parseString(xml, { async: false }, (err, result) => {
+  parseString(xml, { async: false, explicitChildren: true }, (err, result) => {
     if (err) throw err;
     parse = result;
   });

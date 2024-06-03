@@ -30,7 +30,7 @@ export type $<T extends any = {}> = {
  * { "bpmn:process": { "bpmn:userTask": { "$": { "id": "userTaskId", "name": "userTask" } } } }
  * ```
  */
-export type $$<T> = T extends string[] ? string[] : T extends string ? { _: T } : { [key in keyof T]: T[key] };
+export type $$<T> = T extends string[] ? { $$: string[] } : T extends string ? { _: T } : { $$: { [key in keyof T]: T[key] } };
 
 /**
  * BPMN base element. all BPMN elements should extend this type.
@@ -80,7 +80,26 @@ export enum TaskType {
   Business = 'business',
 }
 
-export type BPMNTask = BPMNElement<{ taskType: TaskType }>;
+export type BPMNResourceParameter = BPMNElement<{ name: string; isRequired: boolean }>;
+
+export type BPMNResource = BPMNElement<{ name: string }, { 'bpmn:resourceParameters': BPMNResourceParameter[] }>;
+
+export type BPMNResourceParameterBinding = BPMNElement<{ parameterRef: string }, { 'bpmn:formalExpression': string }>;
+
+export type BPMNResourceAssignmentExpression = BPMNElement<void, { 'bpmn:formalExpression': string }>;
+
+export type BPMNResourceRole = BPMNElement<
+  void,
+  {
+    'bpmn:resourceRef': [string];
+    'bpmn:resourceParameterBinding': BPMNResourceParameterBinding[];
+    'bpmn:resourceAssignmentExpression': BPMNResourceAssignmentExpression[];
+  }
+>;
+
+export type BPMNPotentialOwner = BPMNResourceRole;
+
+export type BPMNTask = BPMNElement<{ taskType: TaskType }, { 'bpmn:potentialOwner': BPMNPotentialOwner[] }>;
 
 /**
  * BPMN Gateway Definition
@@ -113,6 +132,7 @@ export type BPMNProcess = BPMNElement<
     'bpmn:startEvent'?: BPMNStartEvent[];
     'bpmn:sequenceFlow'?: BPMNSequenceFlow[];
     'bpmn:boundaryEvent'?: BPMNBoundaryEvent[];
+    'bpmn:resource'?: BPMNResource[];
   } & {
     [x in BPMNTaskType]?: BPMNTask[];
   } & {

@@ -1,0 +1,27 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  color: #333;
+  background: white;
+}
+
+#canvas {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+/* COLOR PICKER */
+
+.djs-popup.color-picker .entry {
+  margin: 0;
+}
+
+.djs-popup.color-picker .djs-popup-group {
+  display: grid;
+  grid: auto-flow / 1fr 1fr 1fr;
+}

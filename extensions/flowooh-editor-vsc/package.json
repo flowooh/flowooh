@@ -1,0 +1,58 @@
+{
+  "name": "@flowooh/editor-vsc",
+  "displayName": "flowooh-editor-vsc",
+  "description": "Editor for Flowooh",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.89.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.flowooh-editor"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "flowooh-editor.new",
+        "title": "Create new Flowooh File",
+        "category": "BPMN"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "flowooh-editor",
+        "displayName": "Flowooh Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.bpmn"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "watch:app": "npm run compile:app -- -w",
+    "watch": "run-p watch:*",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test",
+    "compile": "run-s compile:clean compile:app",
+    "compile:app": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "compile:clean": "shx rm -rf out"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/vscode": "^1.89.0",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.3.9",
+    "mocha": "^10.4.0"
+  },
+  "dependencies": {
+    "bpmn-js": "^17.8.1",
+    "bpmn-js-color-picker": "^0.7.1"
+  }
+}

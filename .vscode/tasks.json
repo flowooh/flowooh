@@ -6,7 +6,6 @@
     {
       "type": "npm",
       "script": "watch",
-      "problemMatcher": "$tsc-watch",
       "isBackground": true,
       "presentation": {
         "reveal": "never"
@@ -21,8 +20,8 @@
     },
     {
       "label": "compile-editor-vsc",
-      "type": "shell",
-      "command": "npm run compile",
+      "type": "npm",
+      "script": "compile",
       "options": {
         "cwd": "${workspaceFolder}/extensions/flowooh-editor-vsc"
       }

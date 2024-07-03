@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "types": ["node", "mocha","./types.d.ts"],
+    "module": "ESNext",
     "target": "ES2022",
     "outDir": "out",
+    "lib": ["DOM", "ES2022"],
     "sourceMap": true,
     "rootDir": "src",
     "strict": true /* enable all strict type-checking options */

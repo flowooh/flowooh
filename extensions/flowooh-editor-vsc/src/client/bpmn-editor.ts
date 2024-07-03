@@ -1,7 +1,3 @@
-/* eslint-env browser */
-
-/* global acquireVsCodeApi */
-
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-js.css';
@@ -9,17 +5,16 @@ import 'bpmn-js/dist/assets/bpmn-js.css';
 import './bpmn-editor.css';
 
 import BpmnModeler from 'bpmn-js/lib/Modeler';
+import CommandStack from 'diagram-js/lib/command/CommandStack';
+import EditorActions from 'diagram-js/lib/features/editor-actions/EditorActions';
 
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
 
 import KeyboardModule from './features/keyboard';
 
-/**
- * @type { import('vscode') }
- */
 const vscode = acquireVsCodeApi();
 
-const modeler = new BpmnModeler({
+const modeler = new BpmnModeler<{ commandStack: CommandStack; editorActions: EditorActions }>({
   container: '#canvas',
   keyboard: {
     bindTo: document,
@@ -27,20 +22,17 @@ const modeler = new BpmnModeler({
   additionalModules: [KeyboardModule, BpmnColorPickerModule],
 });
 
-modeler.on('import.done', (event) => {
+modeler.on('import.done', (event: any) => {
   return vscode.postMessage({
     type: 'import',
     error: event.error?.message,
-    warnings: event.warnings.map((warning) => warning.message),
+    warnings: event.warnings.map((warning: any) => warning.message),
     idx: -1,
   });
 });
 
 modeler.on('commandStack.changed', () => {
-  /**
-   * @type { import('diagram-js/lib/command/CommandStack').default }
-   */
-  const commandStack = modeler.get('commandStack');
+  const commandStack = modeler.get<CommandStack & { _stackIdx: number }>('commandStack');
 
   return vscode.postMessage({
     type: 'change',

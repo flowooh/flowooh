@@ -10,13 +10,14 @@ import css from 'rollup-plugin-css-only';
 module.exports = [
   // client
   {
-    input: './src/client/bpmn-editor.js',
+    input: './src/client/bpmn-editor.ts',
     output: {
       sourcemap: true,
       format: 'iife',
       file: './out/client/bpmn-editor.js',
     },
     plugins: [
+      typescript({ tsconfig: './tsconfig.build.json' }),
       url({
         fileName: '[dirname][filename][extname]',
         publicPath: '/media/',
@@ -38,7 +39,7 @@ module.exports = [
       file: './out/extension.js',
     },
     external: ['vscode'],
-    plugins: [typescript(), resolve(), commonjs()],
+    plugins: [typescript({ tsconfig: './tsconfig.build.json' }), resolve(), commonjs()],
     watch: {
       clearScreen: false,
     },

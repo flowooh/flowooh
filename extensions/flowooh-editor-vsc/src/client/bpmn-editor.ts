@@ -9,6 +9,10 @@ import CommandStack from 'diagram-js/lib/command/CommandStack';
 import EditorActions from 'diagram-js/lib/features/editor-actions/EditorActions';
 
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
+import 'bpmn-js-color-picker/colors/color-picker.css';
+
+import { BpmnPropertiesPanelModule, BpmnPropertiesProviderModule } from 'bpmn-js-properties-panel';
+import '@bpmn-io/properties-panel/dist/assets/properties-panel.css';
 
 import KeyboardModule from './features/keyboard';
 
@@ -16,10 +20,13 @@ const vscode = acquireVsCodeApi();
 
 const modeler = new BpmnModeler<{ commandStack: CommandStack; editorActions: EditorActions }>({
   container: '#canvas',
+  propertiesPanel: {
+    parent: '#properties',
+  },
   keyboard: {
     bindTo: document,
   },
-  additionalModules: [KeyboardModule, BpmnColorPickerModule],
+  additionalModules: [KeyboardModule, BpmnColorPickerModule, BpmnPropertiesPanelModule, BpmnPropertiesProviderModule],
 });
 
 modeler.on('import.done', (event: any) => {

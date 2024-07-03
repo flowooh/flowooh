@@ -52,7 +52,9 @@
     "mocha": "^10.4.0"
   },
   "dependencies": {
+    "@bpmn-io/properties-panel": "^3.22.0",
     "bpmn-js": "^17.8.1",
-    "bpmn-js-color-picker": "^0.7.1"
+    "bpmn-js-color-picker": "^0.7.1",
+    "bpmn-js-properties-panel": "^5.18.0"
   }
 }

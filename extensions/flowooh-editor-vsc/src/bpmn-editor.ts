@@ -462,6 +462,7 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
       </head>
       <body>
         <div id="canvas"></div>
+        <div id="properties"></div>
 
         <script nonce="${nonce}" src="${scriptUri}"></script>
       </body>

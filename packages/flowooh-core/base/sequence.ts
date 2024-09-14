@@ -37,7 +37,8 @@ export class Sequence extends Attribute {
     }
     return (data: object) => {
       try {
-        return this.conditionExpression?.expression(data);
+        const result = this.conditionExpression?.expression(data);
+        return result;
       } catch (e) {
         log.warn(`Error evaluating expression: ${e.message}`);
         return false;

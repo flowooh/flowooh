@@ -1,4 +1,4 @@
-import { TemplateExecutor, template } from 'lodash';
+import vm from 'vm';
 import { BPMNConditionExpression, BPMNProcess } from '../types';
 
 export class ConditionExpression {
@@ -23,9 +23,18 @@ export class ConditionExpression {
     return this._;
   }
 
-  get expression(): TemplateExecutor {
+  get expression(): (data: any) => boolean {
     try {
-      return template(this.expressionString);
+      const sandbox: vm.Context = { console: console };
+      const script = new vm.Script(this.expressionString);
+      const context = vm.createContext(sandbox);
+      script.runInContext(context);
+
+      if (context.condition && typeof context.condition === 'function') {
+        return context.condition as (data: any) => boolean;
+      } else {
+        throw new Error('function condition is not defined or not a function');
+      }
     } catch (e) {
       throw new Error(`Error parsing expression: ${this.expressionString}`);
     }

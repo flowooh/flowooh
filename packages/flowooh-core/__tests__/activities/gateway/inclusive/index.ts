@@ -3,11 +3,11 @@ import { Context } from '@flowooh/core/context';
 import { Act, Ctx, Data, Node, Process, Value } from '@flowooh/core/decorators';
 import { Workflow } from '@flowooh/core/engine';
 
-@Process({ definitionId: 'simple-workflow-inclusive-condition', name: 'simple-workflow-inclusive-condition' })
-export class SimpleWorkflowInclusiveCondition extends Workflow {
-  @Node({ id: 'StartEvent_1ogvy0x', name: 'Start' })
+@Process({ definitionId: 'index', name: 'index' })
+export class SimpleWorkflowInclusive extends Workflow {
+  @Node({ name: 'Start' })
   public start(@Act() activity: EventActivity, @Ctx() context: Context, @Data() data: any, @Value() value: any) {
-    context.data = { ...(data || {}), exclusiveCondition: 'B' };
+    context.data = { ...(data || {}), ...(value || {}) };
     activity.takeOutgoing();
   }
 }

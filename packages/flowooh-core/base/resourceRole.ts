@@ -81,7 +81,7 @@ export class ResourceRole extends Attribute {
 
   execute() {
     if (this.resourceAssignmentExpression) {
-      return this.resourceAssignmentExpression.expression();
+      return this.resourceAssignmentExpression.expression?.();
     }
     if (this.resource) {
       const params = this.resource.resourceParameters.map((p) => {

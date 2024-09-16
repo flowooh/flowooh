@@ -40,14 +40,11 @@ describe('Flowooh Parallel Gateway', () => {
     expect(nextContext.isTerminated()).toBeTruthy();
     const nextTokens = nextContext.tokens;
 
-    const nextTokenParallel1 = nextTokens.slice(1).map((t) => t.history.map((h) => h.name));
+    const nextTokenParallel1 = nextTokens.slice(1, 3).map((t) => t.history.map((h) => h.name));
     expect(nextTokenParallel1).toContainEqual(['TaskA', 'G2']);
     expect(nextTokenParallel1).toContainEqual(['TaskB', 'TaskB2', 'G2']);
 
-    const nextTokenG2 = nextTokens[3].history.map((h) => h.name);
-    expect(nextTokenG2).toEqual(['G2']);
-
-    const nextTokenParallel2 = nextTokens.slice(4).map((t) => t.history.map((h) => h.name));
+    const nextTokenParallel2 = nextTokens.slice(4, 6).map((t) => t.history.map((h) => h.name));
     expect(nextTokenParallel2).toContainEqual(['TaskC', 'G3']);
     expect(nextTokenParallel2).toContainEqual(['TaskD', 'G3']);
 

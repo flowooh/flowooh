@@ -14,21 +14,30 @@ export interface IContext<D = any, SV = any> {
 export class Context<D = any, SV = any> implements IContext<D, SV>, Serializable<IContext, 'value' | 'data'> {
   public data?: D;
   public tokens: Token<SV>[] = [];
-  public status: Status = Status.Ready;
+  private _status: Status = Status.Ready;
 
   constructor(data?: Partial<IContext>) {
     if (data) Object.assign(this, data);
   }
 
+  get status() {
+    return this._status;
+  }
+
   pause() {
-    this.status = Status.Paused;
+    this._status = Status.Paused;
+    return this;
+  }
+
+  running() {
+    this._status = Status.Running;
     return this;
   }
 
   resume(force = false) {
-    if (force) this.status = Status.Ready;
-    else if (this.status !== Status.Terminated) {
-      this.status = Status.Ready;
+    if (force) this._status = Status.Ready;
+    else if (this._status !== Status.Terminated) {
+      this._status = Status.Ready;
     }
     return this;
   }
@@ -48,11 +57,11 @@ export class Context<D = any, SV = any> implements IContext<D, SV>, Serializable
   }
 
   isReady() {
-    return this.status === Status.Ready;
+    return this._status === Status.Ready;
   }
 
   isFailed() {
-    return this.status === Status.Failed;
+    return this._status === Status.Failed;
   }
 
   isPaused() {
@@ -72,17 +81,17 @@ export class Context<D = any, SV = any> implements IContext<D, SV>, Serializable
   }
 
   complete() {
-    this.status = Status.Completed;
+    this._status = Status.Completed;
     return this;
   }
 
   fail() {
-    this.status = Status.Failed;
+    this._status = Status.Failed;
     return this;
   }
 
   terminate() {
-    this.status = Status.Terminated;
+    this._status = Status.Terminated;
     return this;
   }
 
@@ -92,7 +101,7 @@ export class Context<D = any, SV = any> implements IContext<D, SV>, Serializable
 
   serialize({ data, value } = { data: true, value: true }) {
     return {
-      status: this.status,
+      status: this._status,
       ...(data ? { data: this.data } : {}),
       tokens: this.tokens.map((t) => t.serialize({ value })),
     };

@@ -23,12 +23,21 @@ export class Token<V = any> implements IToken<V>, Serializable<IToken, 'value'> 
   public readonly id = uid();
 
   public parent?: string;
-  public locked?: boolean;
+  private _locked?: boolean;
 
   public history: State[] = [];
 
   constructor(data?: Partial<IToken<V>>) {
     if (data) Object.assign(this, data);
+  }
+
+  get locked() {
+    return this._locked;
+  }
+
+  lock() {
+    this._locked = true;
+    return this;
   }
 
   push(state: State) {
@@ -37,7 +46,7 @@ export class Token<V = any> implements IToken<V>, Serializable<IToken, 'value'> 
   }
 
   pop() {
-    return !this.locked && this.history.pop();
+    return !this._locked && this.history.pop();
   }
 
   pause() {
@@ -80,7 +89,7 @@ export class Token<V = any> implements IToken<V>, Serializable<IToken, 'value'> 
       id: this.id,
       history: this.history.map((s) => s.serialize({ value })),
       ...(this.parent ? { parent: this.parent } : {}),
-      ...(this.locked !== undefined ? { locked: this.locked } : {}),
+      ...(this._locked !== undefined ? { locked: this._locked } : {}),
     };
   }
 

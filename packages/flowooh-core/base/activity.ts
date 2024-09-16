@@ -1,9 +1,10 @@
-import { TaskActivity } from '@flowooh/core/activities';
+import { EventActivity, TaskActivity } from '@flowooh/core/activities';
 import { Context, State, Status, Token } from '@flowooh/core/context';
 import { $$, BPMNActivity, BPMNProcess, BPMNSequenceFlow, IdentityOptions, TaskType } from '@flowooh/core/types';
 import { getWrappedBPMNElement, takeOutgoing } from '@flowooh/core/utils';
 import { Attribute } from './attribute';
 import { Sequence } from './sequence';
+import { uniq, uniqBy } from 'lodash';
 
 export class Activity extends Attribute {
   protected readonly key?: string;
@@ -42,6 +43,50 @@ export class Activity extends Attribute {
         if (flow) return Sequence.build(this.process, flow);
       })
       .filter((f) => f instanceof Sequence) as Sequence[];
+  }
+
+  get incomingActivities(): Activity[] | undefined {
+    return this.incoming?.map((flow) => flow.sourceRef)?.filter(Boolean) as Activity[] | undefined;
+  }
+
+  get outgoingActivities(): Activity[] | undefined {
+    return this.outgoing?.map((flow) => flow.targetRef)?.filter((act) => act && act !== this) as Activity[] | undefined;
+  }
+
+  /**
+   * returns an array of ${@link Activity} object that UPSTREAM from the current activity
+   */
+  get upStreamActivities(): Activity[] | undefined {
+    const activities: Activity[] = [];
+    let pre = this.incomingActivities;
+
+    while (pre?.length) {
+      activities.push(...pre);
+      pre = uniqBy(
+        pre.reduce<Activity[]>((acc, act) => [...acc, ...(act.incomingActivities || [])], []),
+        (a) => a.id,
+      );
+    }
+
+    return activities;
+  }
+
+  /**
+   * returns an array of ${@link Activity} object that DOWNSTREAM from the current activity
+   */
+  get downStreamActivities(): Activity[] | undefined {
+    const activities: Activity[] = [];
+    let next = this.outgoingActivities;
+
+    while (next?.length) {
+      activities.push(...next);
+      next = uniqBy(
+        next.reduce((acc, act) => [...acc, ...(act.outgoingActivities || [])], [] as Activity[]),
+        (a) => a.id,
+      );
+    }
+
+    return activities;
   }
 
   /**
@@ -103,7 +148,7 @@ export class Activity extends Attribute {
       }
 
       if (outgoing.length > 1 && this.context) {
-        this.token.locked = true;
+        this.token.lock();
         this.token.status = Status.Terminated;
 
         for (const out of outgoing) {

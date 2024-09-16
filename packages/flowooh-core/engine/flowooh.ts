@@ -83,8 +83,8 @@ export class Flowooh {
     await this.running(context, activity, token, { data, value });
 
     // setting the status of the context to the appropriate status.
-    if (context.isTerminated()) context.status = Status.Terminated;
-    else if (context.status === Status.Running) context.status = Status.Paused;
+    if (context.isTerminated()) context.terminate();
+    else if (context.status === Status.Running) context.pause();
 
     log.info(`Context status is ${context.status}`);
 
@@ -269,7 +269,7 @@ async function run<D = any, V = any>(target: any, method: string, options: Metho
 
   try {
     options.token.status = Status.Running;
-    options.context.status = Status.Running;
+    options.context.running();
 
     log.info(`Activity ${options.activity.id ?? options.activity.name} is running`);
 
@@ -303,7 +303,7 @@ async function run<D = any, V = any>(target: any, method: string, options: Metho
       options.token.pause();
     }
   } catch (error) {
-    options.context.status = Status.Failed;
+    options.context.fail();
     options.token.status = Status.Failed;
     exception = error;
 

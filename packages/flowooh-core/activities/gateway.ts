@@ -1,7 +1,7 @@
 import { Activity, GoOutInterface, Sequence } from '@flowooh/core/base';
 import { Status, Token } from '@flowooh/core/context';
 import { $, BPMNGateway, BPMNProcess, BPMNSequenceFlow, IdentityOptions } from '@flowooh/core/types';
-import { getWrappedBPMNElement, logger, takeOutgoing } from '@flowooh/core/utils';
+import { getActivity, getWrappedBPMNElement, logger, takeOutgoing } from '@flowooh/core/utils';
 
 const log = logger('gateway');
 
@@ -47,6 +47,7 @@ export class GatewayActivity extends Activity {
           // if there are multiple incoming flows, and the number of tokens is not equal to the number of incoming flows,
           // it means that the gateway has not received ALL the tokens from the incoming flows
           // so we pause the gateway, and wait for the rest of the tokens
+          log.debug(`Waiting for all incoming tokens in Parallel Gateway ${this.name}(${this.id})`);
           this.token.pause();
           return;
         }
@@ -57,7 +58,7 @@ export class GatewayActivity extends Activity {
           // but when there are multiple incoming paths, it cannot specify which token to pass to the outgoing path
           // so it is necessary to terminate all the incoming tokens
           tokens.forEach((t) => {
-            t.locked = true;
+            t.lock();
             t.status = Status.Terminated;
           });
 
@@ -72,25 +73,15 @@ export class GatewayActivity extends Activity {
       }
 
       case GatewayType.Inclusive: {
-        if (tokens?.length !== this.incoming?.length) {
+        const actIds = this.context.tokens.filter((t) => t.status !== Status.Completed && t.status !== Status.Terminated).map((t) => t.state.ref);
+        const acts = actIds.map((actId) => getActivity(this.process, getWrappedBPMNElement(this.process, { id: actId })));
+        if (!tokens?.length || acts.some((act) => act.downStreamActivities?.some((a) => a.id === this.id))) {
           // if there are multiple incoming flows, and the number of tokens is not equal to the number of incoming flows,
           // it means that the gateway has not received ALL the tokens from the incoming flows
           // so we pause the gateway, and wait for the rest of the tokens
+          log.debug(`Waiting for all incoming tokens in Exclusive Gateway ${this.name}(${this.id})`);
           this.token.pause();
           return;
-        }
-        if (this.incoming.length > 1) {
-          // if there are multiple incoming flows, it should terminate all the incoming tokens, and create a new token
-          // when there is only one incoming path, it has no confusion, and the token can be passed directly
-          // but when there are multiple incoming paths, it cannot specify which token to pass to the outgoing path
-          // so it is necessary to terminate all the incoming tokens
-          tokens.forEach((t) => {
-            t.locked = true;
-            t.status = Status.Terminated;
-          });
-
-          this.token = Token.build({ history: [this.token.state.clone()] });
-          this.context.addToken(this.token);
         }
 
         // execute the outgoing path that meets the condition
@@ -99,6 +90,20 @@ export class GatewayActivity extends Activity {
           log.info(`Condition Result of ${out.id} in Inclusive Gateway ${this.name}(${this.id}): ${r}`);
           return r;
         });
+
+        if (matchedSequences.length > 1) {
+          // if there are multiple incoming flows, it should terminate all the incoming tokens, and create a new token
+          // when there is only one incoming path, it has no confusion, and the token can be passed directly
+          // but when there are multiple incoming paths, it cannot specify which token to pass to the outgoing path
+          // so it is necessary to terminate all the incoming tokens
+          tokens.forEach((t) => {
+            t.lock();
+            t.status = Status.Terminated;
+          });
+
+          this.token = Token.build({ history: [this.token.state.clone()] });
+          this.context.addToken(this.token);
+        }
 
         // if there are multiple outgoing paths that meet the condition, all the outgoing paths should be executed
         if (matchedSequences.length >= 1) {
@@ -110,25 +115,15 @@ export class GatewayActivity extends Activity {
       }
 
       case GatewayType.Exclusive: {
-        if (tokens?.length !== this.incoming?.length) {
+        const actIds = this.context.tokens.filter((t) => t.status !== Status.Completed && t.status !== Status.Terminated).map((t) => t.state.ref);
+        const acts = actIds.map((actId) => getActivity(this.process, getWrappedBPMNElement(this.process, { id: actId })));
+        if (!tokens?.length || acts.some((act) => act.downStreamActivities?.some((a) => a.id === this.id))) {
           // if there are multiple incoming flows, and the number of tokens is not equal to the number of incoming flows,
           // it means that the gateway has not received ALL the tokens from the incoming flows
           // so we pause the gateway, and wait for the rest of the tokens
+          log.debug(`Waiting for all incoming tokens in Exclusive Gateway ${this.name}(${this.id})`);
           this.token.pause();
           return;
-        }
-        if (this.incoming.length > 1) {
-          // if there are multiple incoming flows, it should terminate all the incoming tokens, and create a new token
-          // when there is only one incoming path, it has no confusion, and the token can be passed directly
-          // but when there are multiple incoming paths, it cannot specify which token to pass to the outgoing path
-          // so it is necessary to terminate all the incoming tokens
-          tokens.forEach((t) => {
-            t.locked = true;
-            t.status = Status.Terminated;
-          });
-
-          this.token = Token.build({ history: [this.token.state.clone()] });
-          this.context.addToken(this.token);
         }
 
         // execute the outgoing path that meets the condition
@@ -137,6 +132,17 @@ export class GatewayActivity extends Activity {
           log.info(`Condition Result of ${out.id} in Exclusive Gateway ${this.name}(${this.id}): ${r}`);
           return r;
         });
+
+        if (matchedSequences.length > 1) {
+          // if there are multiple incoming flows, it should terminate all the incoming tokens, and create a new token
+          // when there is only one incoming path, it has no confusion, and the token can be passed directly
+          // but when there are multiple incoming paths, it cannot specify which token to pass to the outgoing path
+          // so it is necessary to terminate all the incoming tokens
+          tokens.forEach((t) => {
+            t.lock();
+            t.status = Status.Terminated;
+          });
+        }
 
         // if there are multiple outgoing paths that meet the condition, only one of them should be executed
         // TODO: sequences should be sorted by priority, instead of the first one

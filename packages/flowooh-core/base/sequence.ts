@@ -19,7 +19,7 @@ export class Sequence extends Attribute {
 
   get sourceRef() {
     if (!this.$.sourceRef) return null;
-    return getActivity(this.process, getWrappedBPMNElement(this.process, { id: this.$.targetRef }));
+    return getActivity(this.process, getWrappedBPMNElement(this.process, { id: this.$.sourceRef }));
   }
 
   get targetRef() {

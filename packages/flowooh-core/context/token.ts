@@ -72,6 +72,7 @@ export class Token<V = any> implements IToken<V>, Serializable<IToken, 'value'> 
 
   set status(status: Status) {
     if (!this.state) throw Error('No state to set status');
+    // 如果token终止了，则需要通知对应的网关
     this.state.status = status;
   }
 

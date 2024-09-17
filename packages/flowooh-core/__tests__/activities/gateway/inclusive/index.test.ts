@@ -110,13 +110,17 @@ describe('Flowooh Inclusive Gateway', () => {
     const { context: processingContext } = await workflow.execute({
       factory: () => new SimpleWorkflowInclusive(),
       schema: parse(xml)['bpmn:definitions'],
-      value: { g1: ['B'], g2: [], g3: ['C'] },
+      value: { g1: ['A', 'B'], g2: [], g3: ['C'] },
     });
 
     // TaskB1 is paused because it is a UserTask
     const { context } = await workflow.execute({ context: processingContext, node: { name: 'TaskB1' } });
 
     expect(context.isTerminated()).toBeTruthy();
-    expect(context.tokens[0].history.map((h) => h.name)).toEqual(['Start', 'G1', 'TaskB', 'TaskB1', 'G2', 'TaskB2', 'G3', 'TaskC', 'End']);
+    expect(context.tokens[0].history.map((h) => h.name)).toEqual(['Start', 'G1']);
+    expect(context.tokens[1].history.map((h) => h.name)).toEqual(['G1']);
+
+    expect(context.tokens.slice(2, 4).map((t) => t.history.map((h) => h.name))).toContainEqual(['TaskA', 'G3', 'TaskC', 'End']);
+    expect(context.tokens.slice(2, 4).map((t) => t.history.map((h) => h.name))).toContainEqual(['TaskB', 'TaskB1', 'G2']);
   });
 });

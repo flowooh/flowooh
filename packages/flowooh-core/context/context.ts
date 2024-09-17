@@ -51,6 +51,11 @@ export class Context<D = any, SV = any> implements IContext<D, SV>, Serializable
     if ('name' in identity) return this.tokens.filter((token) => token.state.name === identity.name);
   }
 
+  getProcessingTokens() {
+    const processStatuses = [Status.Ready, Status.Paused, Status.Running];
+    return this.tokens.filter((t) => processStatuses.includes(t.status));
+  }
+
   delTokens(identity: IdentityOptions) {
     const tokens = this.getTokens(identity)?.map((t) => t.id);
     if (tokens?.length) this.tokens = this.tokens.filter((t) => !tokens.includes(t.id));

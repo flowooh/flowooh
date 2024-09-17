@@ -25,6 +25,43 @@ export class GatewayActivity extends Activity {
     super(process, data, key);
   }
 
+  /**
+   * check if the gateway should wait for all incoming tokens
+   *
+   * Parallel Gateway MUST wait for all incomings.
+   * Inclusive Gateway and Exclusive Gateway MUST wait for all incomings with token, if flow was terminated, it should be ignored.
+   *
+   * For example,
+   * If a Parallel Gateway has 2 incoming flows, it MUST wait for 2 incoming tokens.
+   * If an Inclusive Gateway has 2 incoming flows,
+   *  1. all incomings reached, flow should be continued.
+   *  2. at least one incomings doesn't reach, it should wait.
+   *  3. if one incoming reached, and another incoming was terminated, it should be continued.
+   */
+  protected shouldWait() {
+    if (!this.context) {
+      throw new Error('Context is missing');
+    }
+
+    switch (this.type) {
+      case GatewayType.Complex:
+      case GatewayType.Parallel: {
+        const tokens = this.context.getTokens({ id: this.id });
+        return tokens?.length !== this.incoming?.length;
+      }
+      case GatewayType.Inclusive: {
+        const acts = this.upStreamActivities({ processing: true });
+        return acts?.length;
+      }
+      case GatewayType.Exclusive: {
+        const acts = this.upStreamActivities({ processing: true });
+        return acts?.length;
+      }
+      default:
+        return false;
+    }
+  }
+
   protected takeGatewayOutgoing(identity?: IdentityOptions) {
     let outgoing: Activity[] | undefined = takeOutgoing(this.outgoing, identity);
 
@@ -37,22 +74,26 @@ export class GatewayActivity extends Activity {
 
     // get all the tokens that are currently in the gateway
     const tokens = this.context.getTokens({ id: this.id });
+    if (!tokens) {
+      throw new Error('Tokens are missing');
+    }
+
+    const unmatchedSequences: Sequence[] = [];
+
+    if (this.shouldWait()) {
+      log.debug(`Waiting for all incoming tokens in ${this.type} Gateway ${this.name}(${this.id})`);
+      this.token.pause();
+      return;
+    }
 
     switch (this.type) {
       case GatewayType.Complex: {
         break;
       }
       case GatewayType.Parallel: {
-        if (tokens?.length !== this.incoming?.length) {
-          // if there are multiple incoming flows, and the number of tokens is not equal to the number of incoming flows,
-          // it means that the gateway has not received ALL the tokens from the incoming flows
-          // so we pause the gateway, and wait for the rest of the tokens
-          log.debug(`Waiting for all incoming tokens in Parallel Gateway ${this.name}(${this.id})`);
-          this.token.pause();
-          return;
-        }
+        const matchedSequences = this.outgoing;
 
-        if (this.incoming.length > 1) {
+        if (matchedSequences.length > 1) {
           // if there are multiple incoming flows, it should terminate all the incoming tokens, and create a new token
           // when there is only one incoming path, it has no confusion, and the token can be passed directly
           // but when there are multiple incoming paths, it cannot specify which token to pass to the outgoing path
@@ -67,27 +108,16 @@ export class GatewayActivity extends Activity {
         }
 
         // all the outgoing paths should be executed
-        const matchedSequences = this.outgoing;
         outgoing = takeOutgoing(matchedSequences);
         break;
       }
 
       case GatewayType.Inclusive: {
-        const actIds = this.context.tokens.filter((t) => t.status !== Status.Completed && t.status !== Status.Terminated).map((t) => t.state.ref);
-        const acts = actIds.map((actId) => getActivity(this.process, getWrappedBPMNElement(this.process, { id: actId })));
-        if (!tokens?.length || acts.some((act) => act.downStreamActivities?.some((a) => a.id === this.id))) {
-          // if there are multiple incoming flows, and the number of tokens is not equal to the number of incoming flows,
-          // it means that the gateway has not received ALL the tokens from the incoming flows
-          // so we pause the gateway, and wait for the rest of the tokens
-          log.debug(`Waiting for all incoming tokens in Exclusive Gateway ${this.name}(${this.id})`);
-          this.token.pause();
-          return;
-        }
-
         // execute the outgoing path that meets the condition
         const matchedSequences = this.outgoing?.filter((out) => {
           const r = out.condition(this.context?.data);
-          log.info(`Condition Result of ${out.id} in Inclusive Gateway ${this.name}(${this.id}): ${r}`);
+          log.info(`Condition Result of ${out.id} in Gateway ${this.name}(${this.id}): ${r}`);
+          if (r === false) unmatchedSequences.push(out);
           return r;
         });
 
@@ -115,21 +145,11 @@ export class GatewayActivity extends Activity {
       }
 
       case GatewayType.Exclusive: {
-        const actIds = this.context.tokens.filter((t) => t.status !== Status.Completed && t.status !== Status.Terminated).map((t) => t.state.ref);
-        const acts = actIds.map((actId) => getActivity(this.process, getWrappedBPMNElement(this.process, { id: actId })));
-        if (!tokens?.length || acts.some((act) => act.downStreamActivities?.some((a) => a.id === this.id))) {
-          // if there are multiple incoming flows, and the number of tokens is not equal to the number of incoming flows,
-          // it means that the gateway has not received ALL the tokens from the incoming flows
-          // so we pause the gateway, and wait for the rest of the tokens
-          log.debug(`Waiting for all incoming tokens in Exclusive Gateway ${this.name}(${this.id})`);
-          this.token.pause();
-          return;
-        }
-
         // execute the outgoing path that meets the condition
         const matchedSequences = this.outgoing?.filter((out) => {
           const r = out.condition(this.context?.data);
-          log.info(`Condition Result of ${out.id} in Exclusive Gateway ${this.name}(${this.id}): ${r}`);
+          log.info(`Condition Result of ${out.id} in Gateway ${this.name}(${this.id}): ${r}`);
+          if (r === false) unmatchedSequences.push(out);
           return r;
         });
 
@@ -157,6 +177,29 @@ export class GatewayActivity extends Activity {
         break;
       }
     }
+
+    if (!outgoing) {
+      tokens?.forEach((t) => {
+        t.lock();
+        t.status = Status.Terminated;
+      });
+    }
+
+    unmatchedSequences.forEach((out) => {
+      const inclusiveGateways = out.targetRef
+        ?.downStreamActivities()
+        ?.filter((a) => a instanceof GatewayActivity && a.type === GatewayType.Inclusive);
+      const tokenRefs = this.context?.tokens.filter((t) => t.status === Status.Paused && t.state.ref);
+
+      inclusiveGateways?.forEach((gateway) => {
+        const token = tokenRefs?.find((t) => t.state.ref === gateway.id);
+        if (token) {
+          gateway.context = this.context;
+          gateway.token = token;
+          gateway.takeOutgoing();
+        }
+      });
+    });
 
     return outgoing;
   }

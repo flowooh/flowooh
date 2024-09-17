@@ -56,7 +56,7 @@ export class Activity extends Attribute {
   /**
    * returns an array of ${@link Activity} object that UPSTREAM from the current activity
    */
-  get upStreamActivities(): Activity[] | undefined {
+  upStreamActivities(options?: { processing?: boolean }): Activity[] | undefined {
     const activities: Activity[] = [];
     let pre = this.incomingActivities;
 
@@ -68,13 +68,22 @@ export class Activity extends Attribute {
       );
     }
 
+    if (options?.processing) {
+      if (!this.context) {
+        throw new Error('Context is missing');
+      }
+      return activities.filter((a) => {
+        return this.context?.getProcessingTokens().some((t) => t.state.ref === a.id);
+      });
+    }
+
     return activities;
   }
 
   /**
    * returns an array of ${@link Activity} object that DOWNSTREAM from the current activity
    */
-  get downStreamActivities(): Activity[] | undefined {
+  downStreamActivities(options?: { processing?: boolean }): Activity[] | undefined {
     const activities: Activity[] = [];
     let next = this.outgoingActivities;
 
@@ -84,6 +93,15 @@ export class Activity extends Attribute {
         next.reduce((acc, act) => [...acc, ...(act.outgoingActivities || [])], [] as Activity[]),
         (a) => a.id,
       );
+    }
+
+    if (options?.processing) {
+      if (!this.context) {
+        throw new Error('Context is missing');
+      }
+      return activities.filter((a) => {
+        return this.context?.getProcessingTokens().some((t) => t.state.ref === a.id);
+      });
     }
 
     return activities;
@@ -131,40 +149,50 @@ export class Activity extends Attribute {
 
   /**
    * This function handles outgoing transitions for each token in a workflow system.
+   * if there is only one outgoing transition, the token will be moved to the next activity.
+   * if there are multiple outgoing transitions, the token will be terminated and new tokens will be created for each outgoing transition.
    */
   protected goOut(outgoing: GoOutInterface[]) {
-    if (outgoing?.length && this.token) {
-      if (outgoing.length === 1) {
-        this.token.status = Status.Completed;
+    if (!this.token) {
+      throw new Error('Token is missing');
+    }
+    if (!this.context) {
+      throw new Error('Context is missing');
+    }
+    if (!outgoing?.length) {
+      throw new Error('outgoing should not be empty');
+    }
 
-        const out = outgoing.pop();
+    if (outgoing.length === 1) {
+      this.token.status = Status.Completed;
 
-        this.token.push(
-          State.build(out!.activity!.id, {
-            name: out!.activity!.name,
-            status: this.pause(out!) ? Status.Paused : Status.Ready,
+      const out = outgoing.pop();
+
+      this.token.push(
+        State.build(out!.activity!.id, {
+          name: out!.activity!.name,
+          status: this.pause(out!) ? Status.Paused : Status.Ready,
+        }),
+      );
+    }
+
+    if (outgoing.length > 1) {
+      this.token.lock();
+      this.token.status = Status.Terminated;
+
+      for (const out of outgoing) {
+        const token = Token.build({
+          parent: this.token.id,
+        });
+
+        token.push(
+          State.build(out.activity.id, {
+            name: out.activity.name,
+            status: this.pause(out) ? Status.Paused : Status.Ready,
           }),
         );
-      }
 
-      if (outgoing.length > 1 && this.context) {
-        this.token.lock();
-        this.token.status = Status.Terminated;
-
-        for (const out of outgoing) {
-          const token = Token.build({
-            parent: this.token.id,
-          });
-
-          token.push(
-            State.build(out.activity.id, {
-              name: out.activity.name,
-              status: this.pause(out) ? Status.Paused : Status.Ready,
-            }),
-          );
-
-          this.context.addToken(token);
-        }
+        this.context.addToken(token);
       }
     }
   }
